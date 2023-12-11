@@ -114,6 +114,7 @@ void Game::render()
 	this->window.clear();
 
 	//render object
+	mainMenu.Show(window);
 	this->renderTilemap();
 	this->RenderPlayer();
 
