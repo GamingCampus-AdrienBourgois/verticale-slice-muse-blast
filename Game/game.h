@@ -26,7 +26,6 @@ private:
 
     Player* player;
 	Tilemap* tilemap;
-	Menu* mainmenu;
     void initWindow();
 	void initTilesheet();
     void initPlayer();
@@ -41,7 +40,6 @@ public:
 	void updatePlayer();
     void updateCollision();
 	void updateTilemap();
-    void updateMenu();
 	void update();
     void RenderPlayer();
     void renderTilemap();

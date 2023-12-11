@@ -135,20 +135,17 @@ void Menu::HandleEvents(sf::Event& event, sf::RenderWindow& window) {
         window.close();
     }
     else if (event.type == sf::Event::MouseButtonPressed) {
-        // Vérifiez si le clic de la souris est sur le bouton "Play"
+        // la souris est sur le bouton play
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
         sf::Vector2f mousePositionF(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
 
         if (playButton.getGlobalBounds().contains(mousePositionF)) {
-            // Le bouton "Play" a été cliqué, lancez le jeu
             window.clear();
             window.display();
-            // Ne fermez pas la fenêtre ici, laissez la boucle principale gérer la fermeture
+        }
+        else if (quitButton.getGlobalBounds().contains(mousePositionF)) {
+            // le bouton quit est cliqué, on ferme la fenetre
+            window.close();
         }
     }
-}
-
-void Menu::update()
-{
-    this->HandleEvents(sf::Event& event, sf::RenderWindow& window);
 }

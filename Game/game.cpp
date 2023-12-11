@@ -13,7 +13,7 @@
 
 void Game::initWindow()
 {
-    this->window.create(sf::VideoMode(800, 600), "MUSIC BLAST", sf::Style::Close | sf::Style::Titlebar);
+    this->window.create(sf::VideoMode(1920, 1080), "MUSIC BLAST", sf::Style::Close | sf::Style::Titlebar);
 	this->window.setFramerateLimit(60);
 }
 void Game::initTilesheet()
@@ -82,11 +82,6 @@ void Game::updateTilemap()
 	this->tilemap->update();
 }
 
-void Game::updateMenu()
-{
-	this->mainmenu->update();
-}
-
 void Game::update()
 {
 	while (this->window.pollEvent(this->ev))
@@ -94,9 +89,6 @@ void Game::update()
 		if (this->ev.type == sf::Event::Closed)
 			this->window.close();
 	}
-
-
-	this->updateMenu();
 
 	this->updatePlayer();
 
@@ -120,7 +112,7 @@ void Game::render()
 	this->window.clear();
 
 	//render object
-	//mainMenu.Show(window);
+	mainMenu.Show(window);
 	this->renderTilemap();
 	this->RenderPlayer();
 
