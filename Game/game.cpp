@@ -97,6 +97,7 @@ void Game::update()
 	this->updateTilemap();
 }
 
+
 void Game::RenderPlayer()
 {
 	this->player->render(this->window);
@@ -109,15 +110,14 @@ void Game::renderTilemap()
 
 void Game::render()
 {
+	
 	this->window.clear();
-
 	//render object
 	mainMenu.Show(window);
 	this->renderTilemap();
 	this->RenderPlayer();
 
     this->window.display();
-
 }
 
 const sf::RenderWindow& Game::getWindow() const

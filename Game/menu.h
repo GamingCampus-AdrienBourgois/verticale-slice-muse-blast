@@ -9,7 +9,6 @@ public:
 
     void Show(sf::RenderWindow& window);
     void HandleEvents(sf::Event& event, sf::RenderWindow& window);
-    void update();
 
 private:
     sf::RectangleShape playButton;
