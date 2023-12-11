@@ -13,7 +13,7 @@
 
 void Player::initTexture()
 {
-	if (!this->texturesheet.loadFromFile("texture/ded.jpg"))
+	if (!this->texturesheet.loadFromFile("../Assets/ded.jpg"))
 	{
 		std::cout << "Error::player::image not load" << "\n";
 	}
@@ -114,7 +114,7 @@ void Player::updateMovement()
 	{
 		this->move(1.f, 0.f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) //gauche
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) //gauche
 	{
 		this->move(-1.f, 0.f);
 	}

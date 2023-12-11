@@ -128,6 +128,8 @@ void Menu::Show(sf::RenderWindow& window) {
     }
 }
 
+
+
 void Menu::HandleEvents(sf::Event& event, sf::RenderWindow& window) {
     if (event.type == sf::Event::Closed) {
         window.close();
@@ -144,4 +146,9 @@ void Menu::HandleEvents(sf::Event& event, sf::RenderWindow& window) {
             // Ne fermez pas la fenêtre ici, laissez la boucle principale gérer la fermeture
         }
     }
+}
+
+void Menu::update()
+{
+    this->HandleEvents(sf::Event& event, sf::RenderWindow& window);
 }

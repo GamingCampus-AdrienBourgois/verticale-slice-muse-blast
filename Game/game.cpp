@@ -18,7 +18,7 @@ void Game::initWindow()
 }
 void Game::initTilesheet()
 {
-	if (!this->tilesheet.loadFromFile("texture/sol.png"))
+	if (!this->tilesheet.loadFromFile("../Assets/Tile.jpg"))
 	{
 		std::cout << "Error::tilesheet::image not load" << "\n";
 	}
@@ -57,8 +57,6 @@ Game::~Game()
 
 }
 
-
-
 void Game::updatePlayer()
 {
 	this->player->update();
@@ -84,6 +82,11 @@ void Game::updateTilemap()
 	this->tilemap->update();
 }
 
+void Game::updateMenu()
+{
+	this->mainmenu->update();
+}
+
 void Game::update()
 {
 	while (this->window.pollEvent(this->ev))
@@ -91,6 +94,9 @@ void Game::update()
 		if (this->ev.type == sf::Event::Closed)
 			this->window.close();
 	}
+
+
+	this->updateMenu();
 
 	this->updatePlayer();
 
@@ -114,7 +120,7 @@ void Game::render()
 	this->window.clear();
 
 	//render object
-	mainMenu.Show(window);
+	//mainMenu.Show(window);
 	this->renderTilemap();
 	this->RenderPlayer();
 

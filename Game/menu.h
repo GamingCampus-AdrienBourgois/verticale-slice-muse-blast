@@ -8,6 +8,8 @@ public:
     ~Menu();  // Ajoutez la déclaration du destructeur
 
     void Show(sf::RenderWindow& window);
+    void HandleEvents(sf::Event& event, sf::RenderWindow& window);
+    void update();
 
 private:
     sf::RectangleShape playButton;
@@ -20,5 +22,5 @@ private:
     sf::Texture backgroundTexture;
     sf::Text titleText;
 
-    void HandleEvents(sf::Event& event, sf::RenderWindow& window);
+    
 };
