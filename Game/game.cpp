@@ -13,7 +13,7 @@
 
 void Game::initWindow()
 {
-    this->window.create(sf::VideoMode(1920, 1080), "MUSIC BLAST", sf::Style::Close | sf::Style::Titlebar);
+    this->window.create(sf::VideoMode(800, 600), "MUSIC BLAST", sf::Style::Close | sf::Style::Titlebar);
 	this->window.setFramerateLimit(60);
 }
 void Game::initTilesheet()
@@ -70,7 +70,7 @@ void Game::updateCollision()
 	{
 		this->player->resetVelocityY();
 		this->player->setPosition(
-			this->player->getGlobalBounds().left,
+			this->player->getPosition().x,
 			this->window.getSize().y - this->player->getGlobalBounds().height
   		);
 	}
@@ -88,6 +88,19 @@ void Game::update()
 	{
 		if (this->ev.type == sf::Event::Closed)
 			this->window.close();
+
+		if (this->ev.type == sf::Event::KeyReleased &&
+			(
+				this->ev.key.code == sf::Keyboard::Z ||
+				this->ev.key.code == sf::Keyboard::Q ||
+				this->ev.key.code == sf::Keyboard::S ||
+				this->ev.key.code == sf::Keyboard::D
+				)
+			)
+		{
+			this->player->resetAnimationTimer();
+		}
+			
 	}
 
 	this->updatePlayer();
@@ -113,7 +126,7 @@ void Game::render()
 	
 	this->window.clear();
 	//render object
-	mainMenu.Show(window);
+	//mainMenu.Show(window);
 	this->renderTilemap();
 	this->RenderPlayer();
 
