@@ -35,6 +35,9 @@ private:
 
 	//physics
 
+	Hitbox* hitbox;
+
+
 	sf::Vector2f velocity;
 	float velocityMax;
 	float velocityMin;
@@ -42,6 +45,10 @@ private:
 	float drag;
 	float gravity;
 	float velocityMaxY;
+	float jumpVel;
+
+	bool isjumping = false;
+	bool isonground = true;
 
 
 
@@ -65,11 +72,17 @@ public:
 
 	void setPosition(const float x, const float y);
 	void resetVelocityY();
+	//hitbox
+	
+	void createhitbox(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height);
+
+
 	//function
 
 
 	void resetAnimationTimer();
 	void move(const float dir_x, const float dir_y);
+	void jump(const float dir_x, const float dir_y);
 	void updatePhysics();
 	void updateMovement();
 	void updateAnimation();

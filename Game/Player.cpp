@@ -10,6 +10,7 @@
 #include<SFML/Network.hpp>
 
 #include "player.h"
+#include "Hitbox.h"
 
 void Player::initAnimation()
 {
@@ -20,6 +21,7 @@ void Player::initAnimation()
 
 void Player::initVariables()
 {
+	this->hitbox = NULL;
 	this->animationState = IDLE;
 }
 
@@ -49,10 +51,12 @@ void Player::initphysics()
 	this->drag = 0.80f;
 	this->gravity = 4.f;
 	this->velocityMaxY = 15.f;
+
 }
 
 Player::Player()
 {
+	this->createhitbox(this->sprite, 0.f, 0.f, sprite.getGlobalBounds().width, sprite.getGlobalBounds().height);
 	this->initVariables();
 	this->initAnimation();
 	this->initTexture();
@@ -62,10 +66,6 @@ Player::Player()
 
 Player::~Player()
 {
-
-
-
-
 }
 
 const bool& Player::getAnimationSwitch()
@@ -100,6 +100,15 @@ void Player::resetVelocityY()
 
 }
 
+void Player::createhitbox(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height)
+{
+	this->hitbox = new Hitbox(sprite, offset_x, offset_y, width, height);
+
+
+
+
+}
+
 void Player::resetAnimationTimer()
 {
 	this->animationtimer.restart();
@@ -117,6 +126,11 @@ void Player::move(const float dir_x, const float dir_y)
 	{
 		this->velocity.x = this->velocityMax * ((this->velocity.x < 0.f) ? -1.f : 1.f);
 	}
+}
+
+void Player::jump(const float dir_x, const float dir_y)
+{
+
 }
 
 void Player::updatePhysics()
@@ -152,11 +166,18 @@ void Player::updateMovement()
 		this->animationState = MOVING_LEFT;
 	}
 
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) //haut
-	//{
-	//	this->move(0.f, -1.f);
-	//	this->animationState = JUMPING;
-	//}
+
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) //haut
+	{
+
+
+		this->animationState = JUMPING;
+
+
+
+		
+	}
 	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) //bas
 	//{
 	//	this->move(0.f, 1.f);

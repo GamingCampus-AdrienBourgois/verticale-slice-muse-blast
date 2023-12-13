@@ -20,16 +20,26 @@
 #include"Tilemap.h"
 class Game {
 private:
+
+
     sf::RenderWindow window;
     sf::Event ev;
 	sf::Texture tilesheet;
 
+
+    //background
+    sf::Sprite worldbackground;
+    sf::Texture background;
+
     Player* player;
 	Tilemap* tilemap;
+
+
     void initWindow();
 	void initTilesheet();
     void initPlayer();
 	void initTilemap();
+    void initbackground();
     Menu mainMenu;
 
 public:
@@ -43,6 +53,7 @@ public:
 	void update();
     void RenderPlayer();
     void renderTilemap();
+	void renderbackground();
 	void render();
     const sf::RenderWindow& getWindow() const;
 

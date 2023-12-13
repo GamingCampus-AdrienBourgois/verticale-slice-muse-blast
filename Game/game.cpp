@@ -36,10 +36,19 @@ void Game::initPlayer()
 void Game::initTilemap()
 {
 	this->tilemap = new Tilemap(20, 20, &this->tilesheet, 50);
-	this->tilemap->addTile(0, 0);
+	this->tilemap->addTile(3, 0);
 
 
 
+
+}
+void Game::initbackground()
+{
+	if (!this->background.loadFromFile("../Assets/fondjeux.jpg"))
+	{
+		std::cout << "Error::game::initBackground::background not load" << "\n";
+	}
+	this->worldbackground.setTexture(this->background);
 
 }
 Game::Game()
@@ -48,6 +57,7 @@ Game::Game()
 	this->initTilesheet();
 	this->initPlayer();
 	this->initTilemap();
+	this->initbackground();
 }
 
 Game::~Game()
@@ -72,6 +82,7 @@ void Game::updateCollision()
 		this->player->setPosition(
 			this->player->getPosition().x,
 			this->window.getSize().y - this->player->getGlobalBounds().height
+
   		);
 	}
 
@@ -121,10 +132,20 @@ void Game::renderTilemap()
 	this->tilemap->render(this->window);
 }
 
+void Game::renderbackground()
+{
+	this->window.draw(this->worldbackground);
+
+
+}
+
 void Game::render()
 {
 	
 	this->window.clear();
+	//render bg
+	this->renderbackground();
+
 	//render object
 	//mainMenu.Show(window);
 	this->renderTilemap();
