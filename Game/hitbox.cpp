@@ -9,7 +9,7 @@
 #include<SFML/Window.hpp>
 #include<SFML/Network.hpp>
 
-#include "hitbox.h"
+#include "Hitbox.h"
 
 Hitbox::Hitbox(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height) : sprite(sprite), offsetX(offset_x), offsetY(offset_y)
 {

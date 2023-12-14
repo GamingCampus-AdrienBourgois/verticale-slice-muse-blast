@@ -1,5 +1,5 @@
 #pragma once
-
+#include "hitbox.h"
 enum PLAYER_ANIMATION_STATES 
 {
 	IDLE = 0,
@@ -58,6 +58,7 @@ private:
 	void initTexture();
 	void initSprite();
 	void initphysics();
+	void initHitbox();
 
 public:
 	Player();
@@ -84,6 +85,7 @@ public:
 	void move(const float dir_x, const float dir_y);
 	void jump(const float dir_x, const float dir_y);
 	void updatePhysics();
+	void updateHitbox();
 	void updateMovement();
 	void updateAnimation();
 	void update();

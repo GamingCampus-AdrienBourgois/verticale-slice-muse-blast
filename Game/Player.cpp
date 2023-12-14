@@ -21,7 +21,7 @@ void Player::initAnimation()
 
 void Player::initVariables()
 {
-	this->hitbox = NULL;
+	//this->hitbox = NULL;
 	this->animationState = IDLE;
 }
 
@@ -54,14 +54,21 @@ void Player::initphysics()
 
 }
 
-Player::Player()
+void Player::initHitbox()
 {
 	this->createhitbox(this->sprite, 0.f, 0.f, sprite.getGlobalBounds().width, sprite.getGlobalBounds().height);
+
+}
+
+Player::Player()
+{
+	
 	this->initVariables();
 	this->initAnimation();
 	this->initTexture();
 	this->initSprite();
 	this->initphysics();
+	this->initHitbox();
 }
 
 Player::~Player()
@@ -94,6 +101,7 @@ void Player::setPosition(const float x, const float y)
 
 }
 
+
 void Player::resetVelocityY()
 {
 	this->velocity.y = 0.f;
@@ -103,10 +111,6 @@ void Player::resetVelocityY()
 void Player::createhitbox(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height)
 {
 	this->hitbox = new Hitbox(sprite, offset_x, offset_y, width, height);
-
-
-
-
 }
 
 void Player::resetAnimationTimer()
@@ -150,6 +154,11 @@ void Player::updatePhysics()
 		this->velocity.y = 0.f;
 
 	this->sprite.move(this->velocity);
+}
+
+void Player::updateHitbox()
+{
+	this->hitbox->update();
 }
 
 void Player::updateMovement()
@@ -245,7 +254,7 @@ void Player::update()
 	this->updateAnimation();
 	this->updateMovement();
 	this->updatePhysics();
-
+	this->updateHitbox();
 }
 
 void Player::render(sf::RenderTarget& target)
