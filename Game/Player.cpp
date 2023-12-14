@@ -12,6 +12,8 @@
 #include "player.h"
 #include "Hitbox.h"
 
+//bite
+
 void Player::initAnimation()
 {
 	
