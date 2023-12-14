@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "bullet.h"
+#include "Bullet.h"
 
-class EnemySmall {
+class Enemy {
 private:
     sf::Sprite sprite;
     sf::Texture texture;
@@ -16,10 +16,10 @@ private:
 
 public:
     // Constructeur
-    EnemySmall(float x, float y, bool isBoss = false);
+    Enemy(float x, float y, bool isBoss = false);
 
     // Destructeur
-    ~EnemySmall();
+    ~Enemy();
 
     // Fonctions membres
     const sf::FloatRect getGlobalBounds() const;
@@ -34,7 +34,11 @@ public:
     void render(sf::RenderTarget& target);
 
     // Fonction pour tirer un projectile
-    Projectile* shootProjectile(float playerPosX, float playerPosY);
+
+
+
+    //bullet* shootProjectile(float playerPosX, float playerPosY);
+
 
     // Fonction pour infliger des dégâts à l'ennemi
     void takeDamage(float damage);
@@ -42,9 +46,5 @@ public:
     // Fonction pour activer le bouclier
     void activateShield();
 
-    // Fonction pour augmenter la vitesse
-    void increaseSpeed();
-
-    // Fonction pour gérer les phases du boss
-    void bossPhaseUpdate();
 };
+

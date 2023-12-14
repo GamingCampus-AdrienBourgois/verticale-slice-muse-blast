@@ -17,7 +17,11 @@
 #include "Menu.h"
 #include "player.h"
 #include "Tile.h"
-#include"Tilemap.h"
+#include "Tilemap.h"
+#include "enemy.h"
+#include "Level.h"
+
+
 class Game {
 private:
 
@@ -26,20 +30,39 @@ private:
     sf::Event ev;
 	sf::Texture tilesheet;
 
+    //bullet
 
-    //background
-    sf::Sprite worldbackground;
-    sf::Texture background;
+
+    //Level
+
+
+    //include
 
     Player* player;
 	Tilemap* tilemap;
+    Enemy* enemy;
+	Level* level;
+
+
+    //player GUI
+
+    void initGUI();
+	sf::RectangleShape healthbar;
+    sf::RectangleShape healthbarback;
+
+	//camera
+
+	sf::View Maincamera;
+
+    //main game
 
 
     void initWindow();
+    void initLevel();
 	void initTilesheet();
     void initPlayer();
+    void initEnemy();
 	void initTilemap();
-    void initbackground();
     Menu mainMenu;
 
 public:
@@ -48,12 +71,17 @@ public:
 	virtual ~Game();
 
 	void updatePlayer();
+    void updateCamera();
+    void updateEnemy();
     void updateCollision();
 	void updateTilemap();
+	void updateGUI();
 	void update();
+    void renderLevel();
     void RenderPlayer();
+    void RenderEnemy();
     void renderTilemap();
-	void renderbackground();
+    void renderGUI();
 	void render();
     const sf::RenderWindow& getWindow() const;
 

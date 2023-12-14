@@ -1,17 +1,21 @@
 #pragma once
 class Bullet
 {
+private:
+	sf::Sprite shape;
+	sf::Vector2f direction;
+	float movementSpeed;
+
+
+
+
 public:
+	Bullet();
+	Bullet(sf::Texture& texture, float dir_X, float dir_Y, float movement_speed);
+	virtual ~Bullet();
+
+	void update();
+	void render(sf::RenderTarget* target);
 	
-	sf::CircleShape bullet;
-	sf::Vector2f currVelocity;
-	float maxSpeed;
-
-
-	Bullet(float radius = 5.f) : currVelocity(0.f, 0.f), maxSpeed(15.f)
-	{
-		this->bullet.setRadius(radius);
-		this->bullet.setFillColor(sf::Color::Blue);
-	}
 };
 

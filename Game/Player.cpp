@@ -25,6 +25,10 @@ void Player::initVariables()
 {
 	//this->hitbox = NULL;
 	this->animationState = IDLE;
+
+	//vie
+	this->hpMax = 100;
+	this->hp = this->hpMax;
 }
 
 void Player::initTexture()
@@ -62,6 +66,8 @@ void Player::initHitbox()
 
 }
 
+
+
 Player::Player()
 {
 	
@@ -97,6 +103,34 @@ const sf::FloatRect Player::getGlobalBounds() const
 	return this->sprite.getGlobalBounds();
 }
 
+const int& Player::getHp() const
+{
+	return this->hp;
+}
+
+const int& Player::getHpMax() const
+{
+	return this->hpMax;
+}
+
+
+//modifier
+
+
+void Player::setHp(const int hp)
+{
+	this->hp = hp;
+
+}
+
+void Player::loseHp(const int value)
+{
+	this->hpMax -= value;
+	if(this->hp < 0)
+		this->hp = 0;
+
+}
+
 void Player::setPosition(const float x, const float y)
 {
 	this->sprite.setPosition(x, y);
@@ -108,6 +142,11 @@ void Player::resetVelocityY()
 {
 	this->velocity.y = 0.f;
 
+}
+
+void Player::resetVelocityX()
+{
+	this->velocity.x = 0.f;
 }
 
 void Player::createhitbox(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height)
