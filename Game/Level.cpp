@@ -72,7 +72,7 @@ void Level::initMusic()
     }
 
     music.setLoop(true);
-    music.setVolume(5.0f);
+    music.setVolume(1.0f);
     music.play(); 
 }
 
