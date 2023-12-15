@@ -25,6 +25,11 @@ void Game::initGUI()
 
 }
 
+void Game::initTime()
+{
+	this->hitdelay = sf::seconds(1.0f);
+}
+
 void Game::initWindow()
 {
     this->window.create(sf::VideoMode(1700, 600), "MUSIC BLAST", sf::Style::Close | sf::Style::Titlebar);
@@ -47,6 +52,7 @@ void Game::initEnemy()
 
 Game::Game()
 {
+	this->initTime();
 	this->initWindow();
 	this->initLevel();
 	this->initPlayer();
@@ -91,12 +97,19 @@ void Game::updateCollision()
   		);
 	}
 
-	//collision enemy 
+	//collision player et enemy
+	if (this->player->getHitbox().intersects(this->enemy->getHitbox()))
+	{
+		if (this->timer.getElapsedTime() >= this->hitdelay)
+		{
+			std::cout << "Player collided with enemy!" << std::endl;
 
-	//if (this->player->getPosition().x, +this->player->getGlobalBounds().width == this->enemy->getPosition().x, +this->enemy->getGlobalBounds().width);
-	//{
-	//	this->player->resetVelocityX();
-	//}
+			this->player->loseHp(-10);
+
+			// Reset the hit delay timer
+			this->timer.restart();
+		}
+	}
 
 }
 
@@ -108,7 +121,7 @@ void Game::updateGUI()
 	this->healthbarback.setPosition(sf::Vector2f(this->Maincamera.getCenter().x - 803.f, this->Maincamera.getCenter().y - 283.f));
 
 	//update player GUI
-	this->player->setHp(10);
+	this->player->setHp(100);
 	float hppercent = static_cast<float>(this->player->getHp()) / this->player->getHpMax();
 	this->healthbar.setSize(sf::Vector2f(300.f * hppercent, this->healthbar.getSize().y));
 

@@ -27,6 +27,8 @@ private:
     sf::RenderWindow window;
     sf::Event ev;
 	sf::Texture tilesheet;
+    sf::Time hitdelay;
+    sf::Clock timer;
 
     //bullet
 
@@ -53,7 +55,7 @@ private:
 
     //main game
 
-
+    void initTime();
     void initWindow();
     void initLevel();
     void initPlayer();

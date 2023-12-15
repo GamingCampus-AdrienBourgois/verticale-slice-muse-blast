@@ -78,6 +78,7 @@ public:
 	const bool& getAnimationSwitch();
 	const sf::Vector2f getPosition() const;
 	const sf::FloatRect getGlobalBounds() const;
+	const sf::FloatRect getHitbox() const;
 	const int& getHp() const;
 	const int& getHpMax() const;
 	//modifiers
@@ -88,9 +89,6 @@ public:
 	void setPosition(const float x, const float y);
 	void resetVelocityY();
 	void resetVelocityX();
-	//hitbox
-	
-	void createhitbox(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height);
 
 
 	//function

@@ -1,9 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Bullet.h"
+#include "hitbox.h"
 
 class Enemy {
 private:
+
+
+
     sf::Sprite sprite;
     sf::Texture texture;
     float speed;
@@ -11,8 +15,16 @@ private:
     bool hasShield;
     bool isBoss;
 
+    //hitbox
+
+    Hitbox* hitbox;
+
+
     void initVariables();
+	void initTexture();
     void initSprite();
+    void initHitbox();
+
 
 public:
     // Constructeur
@@ -24,21 +36,11 @@ public:
     // Fonctions membres
     const sf::FloatRect getGlobalBounds() const;
     const sf::Vector2f& getPosition() const;
+    const sf::FloatRect getHitbox() const;
     const bool& isBossEnemy() const;
 
-    // Fonctions de mise à jour
-    void update();
-    void updateSpecific();
-
-    // Fonctions de rendu
-    void render(sf::RenderTarget& target);
-
     // Fonction pour tirer un projectile
-
-
-
     //bullet* shootProjectile(float playerPosX, float playerPosY);
-
 
     // Fonction pour infliger des dégâts à l'ennemi
     void takeDamage(float damage);
@@ -46,5 +48,13 @@ public:
     // Fonction pour activer le bouclier
     void activateShield();
 
+
+    //update
+    void updateHitbox();
+    void update();
+    void updateSpecific();
+    //render
+
+    void render(sf::RenderTarget& target);
 };
 

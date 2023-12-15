@@ -100,6 +100,11 @@ const sf::FloatRect Player::getGlobalBounds() const
 	return this->sprite.getGlobalBounds();
 }
 
+const sf::FloatRect Player::getHitbox() const
+{
+	return this->hitbox->getGlobalBounds();
+}
+
 const int& Player::getHp() const
 {
 	return this->hp;
@@ -134,7 +139,6 @@ void Player::setPosition(const float x, const float y)
 
 }
 
-
 void Player::resetVelocityY()
 {
 	this->velocity.y = 0.f;
@@ -145,9 +149,6 @@ void Player::resetVelocityX()
 {
 	this->velocity.x = 0.f;
 }
-
-
-
 
 void Player::initHitbox()
 {
