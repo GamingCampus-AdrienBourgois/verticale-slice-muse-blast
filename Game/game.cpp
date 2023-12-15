@@ -36,6 +36,11 @@ void Game::initWindow()
 	this->window.setFramerateLimit(60);
 	this->Maincamera = window.getDefaultView();
 }
+void Game::initGround()
+{
+	this->ground = new Ground();
+	this->ground->setPosition(850.f, 300.f);
+}
 void Game::initLevel()
 {
 	this->level = new Level();
@@ -54,11 +59,11 @@ Game::Game()
 {
 	this->initTime();
 	this->initWindow();
+	this->initGround();
 	this->initLevel();
 	this->initPlayer();
 	this->initEnemy();
 	this->initGUI();
-
 }
 
 Game::~Game()
@@ -78,23 +83,20 @@ void Game::updateCamera()
 
 void Game::updateEnemy()
 {
-
 	this->enemy->update();
-
 }
 
 void Game::updateCollision()
 {
 	//collision bas fenetre
 
-	if (this->player->getPosition().y + this->player->getGlobalBounds().height > this->window.getSize().y);
+	if (this->player->getHitbox().intersects(this->ground->getGlobalBounds()));
 	{
 		//this->player->resetVelocityY();
 		this->player->setPosition(
 			this->player->getPosition().x,
 			this->window.getSize().y - this->player->getGlobalBounds().height
-
-  		);
+		);
 	}
 
 	//collision player et enemy
@@ -161,6 +163,11 @@ void Game::update()
 	this->window.setView(Maincamera);
 }
 
+void Game::renderGround()
+{
+	this->ground->render(this->window);
+}
+
 void Game::renderLevel()
 {
 	this->level->render(this->window);
@@ -191,15 +198,15 @@ void Game::render()
 	this->window.clear();
 	//render bg
 	this->renderLevel();
+	this->renderGround();
 
 	//render object
 	//mainMenu.Show(window);
 
-
 	this->RenderPlayer();
 	this->RenderEnemy();
 	this->renderGUI();
-
+	
     this->window.display();
 }
 
