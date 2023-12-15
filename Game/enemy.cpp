@@ -19,7 +19,7 @@ void Enemy::initVariables() {
 
 // Initialise le sprite de l'ennemi
 void Enemy::initSprite() {
-    if (!this->texture.loadFromFile("../assets/enemy.png")) { // IMAGE A CHANGER QUAND ON AURA TROUVE
+    if (!this->texture.loadFromFile("Assets/test/enemy.png")) { // IMAGE A CHANGER QUAND ON AURA TROUVE
         std::cerr << "Error::Enemy::initSprite::Texture not loaded" << std::endl;
     }
 

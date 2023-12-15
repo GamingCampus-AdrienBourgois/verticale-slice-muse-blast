@@ -52,8 +52,10 @@ private:
 	float velocityMaxY;
 	float jumpVel;
 
-	bool isjumping = false;
-	bool isonground = true;
+	bool isJumping;
+	bool isGrounded = true;
+	float jumpHeight;
+	float jumpVelocity;
 
 
 	//health
@@ -62,12 +64,11 @@ private:
 	int hpMax;
 
 	//core
-
+	void initHitbox();
 	void initVariables();
 	void initTexture();
 	void initSprite();
 	void initphysics();
-	void initHitbox();
 
 public:
 	Player();
@@ -94,13 +95,14 @@ public:
 
 	//function
 
+	
 
 	void resetAnimationTimer();
 	void move(const float dir_x, const float dir_y);
-	void jump(const float dir_x, const float dir_y);
+	void jump();
 	void updatePhysics();
-	void updateHitbox();
 	void updateMovement();
+	void updateHitbox();
 	void updateAnimation();
 	void update();
 	void render(sf::RenderTarget& target);

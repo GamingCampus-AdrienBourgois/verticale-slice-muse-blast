@@ -13,53 +13,83 @@
 #include<SFML/Network.hpp>
 
 #include "Level.h"
+#include "Player.h"
 
 
 
 void Level::initTexture()
 {
-	std::random_device rd;
+    std::random_device rd;
 
-	std::mt19937 gen(rd());
+    std::mt19937 gen(rd());
 
-	std::uniform_int_distribution<> dis(1, 4);
+    std::uniform_int_distribution<> dis(1, 4);
 
-	int i = dis(gen);
+    this->randomnumber = dis(gen);
 
-	if (!this->texturesheet.loadFromFile("../Assets/stage" + std::to_string(i) + ".png"))
-	{
-		std::cout << "Loading Backgroung" << "\n";
-	}
+    if (!this->texturesheet.loadFromFile("Assets/sprite/stage" + std::to_string(this->randomnumber) + ".png"))
+    {
+        std::cout << "Loading Backgroung" << "\n";
+    }
+
+
+
+
+
+    if (this->randomnumber == 1)
+    {
+        std::cout << "Electro" << "\n";
+    }
+
+    else if (this->randomnumber == 2)
+    {
+        std::cout << "Lofi" << "\n";
+    }
+
+    else if (this->randomnumber == 3)
+    {
+        std::cout << "Pop" << "\n";
+    }
+
+    else
+    {
+        std::cout << "Blues" << "\n";
+    }
 
 }
 
 void Level::initSprite()
 {
-	this->sprite1.setTexture(this->texturesheet);
-	this->sprite1.setScale(2.5f, 2.5f);
-	this->sprite1.setPosition(-1500.f, -100.f);
+    this->sprite1.setTexture(this->texturesheet);
+    this->sprite1.setScale(2.5f, 2.5f);
+    this->sprite1.setPosition(-1500.f, -100.f);
 }
 
 void Level::initMusic()
 {
-	if (!this->music.openFromFile("../Assets/song/musicElectro.ogg")) {
-		std::cout << "Loading Music" << "\n";
-	}
+    if (!this->music.openFromFile("Assets/music/music" + std::to_string(this->randomnumber) + ".ogg")) {
+        std::cout << "Loading Music" << "\n";
+    }
 
+    music.setLoop(true);
+    music.setVolume(5.0f);
+    music.play(); 
+}
 
-
-	music.setLoop(true);
-	music.setVolume(5.0f);
-	music.play();
+void Level::initmodificationlevel()
+{
+    this->level_player_speed_initial = 10.0f;
+    this->level_ennemy_damage_initial = 0.0f;
 }
 
 
 Level::Level()
 {
 
-	this->initTexture();
-	this->initSprite();
-	this->initMusic();
+    this->initTexture();
+    this->initSprite();
+    this->initMusic();
+    this->initmodificationlevel();
 }
 
 Level::~Level()
@@ -68,6 +98,15 @@ Level::~Level()
 
 void Level::render(sf::RenderTarget& target)
 {
-	target.draw(this->sprite1);
+    target.draw(this->sprite1);
 
+}
+
+
+void Level::level_effect()
+{
+    if (this->randomnumber == 1)
+    {
+        this->level_player_speed = 4;
+    }
 }

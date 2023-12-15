@@ -27,20 +27,13 @@ void Game::initGUI()
 
 void Game::initWindow()
 {
-    this->window.create(sf::VideoMode(800, 600), "MUSIC BLAST", sf::Style::Close | sf::Style::Titlebar);
+    this->window.create(sf::VideoMode(1700, 600), "MUSIC BLAST", sf::Style::Close | sf::Style::Titlebar);
 	this->window.setFramerateLimit(60);
 	this->Maincamera = window.getDefaultView();
 }
 void Game::initLevel()
 {
 	this->level = new Level();
-}
-void Game::initTilesheet()
-{
-	if (!this->tilesheet.loadFromFile("../Assets/Tile.jpg"))
-	{
-		std::cout << "Error::tilesheet::image not load" << "\n";
-	}
 }
 void Game::initPlayer()
 {
@@ -50,20 +43,14 @@ void Game::initEnemy()
 {
 	this->enemy = new Enemy(301, 420, false);
 }
-void Game::initTilemap()
-{
-	this->tilemap = new Tilemap(20, 20, &this->tilesheet, 50);
-	this->tilemap->addTile(3, 0);
-}
+
 
 Game::Game()
 {
 	this->initWindow();
 	this->initLevel();
-	this->initTilesheet();
 	this->initPlayer();
 	this->initEnemy();
-	this->initTilemap();
 	this->initGUI();
 
 }
@@ -71,7 +58,6 @@ Game::Game()
 Game::~Game()
 {
 	delete this->player;
-	delete this->tilemap;
 }
 
 void Game::updatePlayer()
@@ -81,7 +67,7 @@ void Game::updatePlayer()
 
 void Game::updateCamera()
 {
-	this->Maincamera.setCenter(this->player->getPosition().x, 300);
+	this->Maincamera.setCenter((this->player->getPosition().x + 300), 300);
 }
 
 void Game::updateEnemy()
@@ -95,9 +81,9 @@ void Game::updateCollision()
 {
 	//collision bas fenetre
 
-	if (this->player->getPosition().y +this->player->getGlobalBounds().height >= this->window.getSize().y);
+	if (this->player->getPosition().y + this->player->getGlobalBounds().height > this->window.getSize().y);
 	{
-		this->player->resetVelocityY();
+		//this->player->resetVelocityY();
 		this->player->setPosition(
 			this->player->getPosition().x,
 			this->window.getSize().y - this->player->getGlobalBounds().height
@@ -114,19 +100,15 @@ void Game::updateCollision()
 
 }
 
-void Game::updateTilemap()
-{
-	this->tilemap->update();
-}
 
 void Game::updateGUI()
 {
 	//update player GUI POSITION
-	this->healthbar.setPosition(sf::Vector2f(this->player->getPosition().x - 385.f, this->player->getPosition().y - 450.f));
-	this->healthbarback.setPosition(sf::Vector2f(this->player->getPosition().x - 390.f, this->player->getPosition().y -453.f));
+	this->healthbar.setPosition(sf::Vector2f(this->Maincamera.getCenter().x - 800.f, this->Maincamera.getCenter().y - 280.f));
+	this->healthbarback.setPosition(sf::Vector2f(this->Maincamera.getCenter().x - 803.f, this->Maincamera.getCenter().y - 283.f));
 
 	//update player GUI
-	this->player->setHp(100);
+	this->player->setHp(10);
 	float hppercent = static_cast<float>(this->player->getHp()) / this->player->getHpMax();
 	this->healthbar.setSize(sf::Vector2f(300.f * hppercent, this->healthbar.getSize().y));
 
@@ -161,8 +143,6 @@ void Game::update()
 
 	this->updateCollision();
 
-	this->updateTilemap();
-
 	this->updateGUI();
 
 	this->window.setView(Maincamera);
@@ -184,10 +164,6 @@ void Game::RenderEnemy()
 	this->enemy->render(this->window);
 }
 
-void Game::renderTilemap()
-{
-	this->tilemap->render(this->window);
-}
 
 
 void Game::renderGUI()
@@ -207,7 +183,6 @@ void Game::render()
 	//mainMenu.Show(window);
 
 
-	//this->renderTilemap();
 	this->RenderPlayer();
 	this->RenderEnemy();
 	this->renderGUI();

@@ -33,7 +33,7 @@ void Player::initVariables()
 
 void Player::initTexture()
 {
-	if (!this->texturesheet.loadFromFile("../Assets/joueur.png"))
+	if (!this->texturesheet.loadFromFile("Assets/sprite/joueur.png"))
 	{
 		std::cout << "Error::player::image not load" << "\n";
 	}
@@ -55,14 +55,11 @@ void Player::initphysics()
 	this->velocityMin = 1.f;
 	this->acceleration = 3.0f;
 	this->drag = 0.80f;
-	this->gravity = 4.f;
+	this->gravity = 1.f;
 	this->velocityMaxY = 15.f;
-
-}
-
-void Player::initHitbox()
-{
-	this->createhitbox(this->sprite, 0.f, 0.f, sprite.getGlobalBounds().width, sprite.getGlobalBounds().height);
+	this->isJumping = false;
+	this->jumpVelocity = -12.0f; // Adjust the jump velocity as needed
+	this->jumpHeight = 200.0f;   // Adjust the jump height as needed
 
 }
 
@@ -149,9 +146,17 @@ void Player::resetVelocityX()
 	this->velocity.x = 0.f;
 }
 
-void Player::createhitbox(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height)
+
+
+
+void Player::initHitbox()
 {
-	this->hitbox = new Hitbox(sprite, offset_x, offset_y, width, height);
+	float offset_x = 30.0f;
+	float offset_y = 28.0f;
+	float width = 69.0f;
+	float height = 80.0f;
+
+	this->hitbox = new Hitbox(this->sprite, offset_x, offset_y, width, height);
 }
 
 void Player::resetAnimationTimer()
@@ -165,6 +170,9 @@ void Player::move(const float dir_x, const float dir_y)
 	//acceleration
 	this->velocity.x += dir_x * this->acceleration;
 
+	//jump
+
+	
 	
 	//limite velocity
 	if (std::abs(this->velocity.x) > this->velocityMax)
@@ -173,15 +181,31 @@ void Player::move(const float dir_x, const float dir_y)
 	}
 }
 
-void Player::jump(const float dir_x, const float dir_y)
+void Player::jump()
 {
 
+	if (!this->isJumping && this->isGrounded)
+	{
+		this->velocity.y = this->jumpVelocity;
+		this->isJumping = true;
+		this->isGrounded = false;
+	}
 }
+
 
 void Player::updatePhysics()
 {
-	//gavity
-	//this->velocity.y += 1.0 *this->gravity;
+	//jump manager
+
+	if (this->isJumping)
+	{
+		if (this->sprite.getPosition().y < (600 - this->jumpHeight))
+		{
+			this->isJumping = false;
+			this->velocity.y = 0.0f;
+		}
+	}
+
 
 	//deceleration
 	this->velocity *= this->drag;
@@ -197,10 +221,6 @@ void Player::updatePhysics()
 	this->sprite.move(this->velocity);
 }
 
-void Player::updateHitbox()
-{
-	this->hitbox->update();
-}
 
 void Player::updateMovement()
 {
@@ -220,10 +240,8 @@ void Player::updateMovement()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) //haut
 	{
-
-
+		this->jump();
 		this->animationState = JUMPING;
-
 
 
 		
@@ -233,6 +251,11 @@ void Player::updateMovement()
 	//	this->move(0.f, 1.f);
 	//}
 
+}
+
+void Player::updateHitbox()
+{
+	this->hitbox->update();
 }
 
 void Player::updateAnimation()
@@ -285,7 +308,7 @@ void Player::updateAnimation()
 			
 		}
 		this->sprite.setScale(-2.5f, 2.5f);
-		this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 3.f, 0.f);
+		this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 3.2f, 0.f);
 	}
 }
 
@@ -301,4 +324,7 @@ void Player::update()
 void Player::render(sf::RenderTarget& target)
 {
 	target.draw(this->sprite);
+
+	if (this->hitbox)
+		this->hitbox->render(target);
 }

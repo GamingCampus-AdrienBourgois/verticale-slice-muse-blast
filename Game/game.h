@@ -16,8 +16,6 @@
 #include "Scenes/DefaultScene.h"
 #include "Menu.h"
 #include "player.h"
-#include "Tile.h"
-#include "Tilemap.h"
 #include "enemy.h"
 #include "Level.h"
 
@@ -39,7 +37,6 @@ private:
     //include
 
     Player* player;
-	Tilemap* tilemap;
     Enemy* enemy;
 	Level* level;
 
@@ -59,10 +56,8 @@ private:
 
     void initWindow();
     void initLevel();
-	void initTilesheet();
     void initPlayer();
     void initEnemy();
-	void initTilemap();
     Menu mainMenu;
 
 public:
@@ -74,13 +69,11 @@ public:
     void updateCamera();
     void updateEnemy();
     void updateCollision();
-	void updateTilemap();
 	void updateGUI();
 	void update();
     void renderLevel();
     void RenderPlayer();
     void RenderEnemy();
-    void renderTilemap();
     void renderGUI();
 	void render();
     const sf::RenderWindow& getWindow() const;

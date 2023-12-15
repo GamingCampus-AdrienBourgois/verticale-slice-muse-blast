@@ -5,11 +5,11 @@ Menu::Menu() {
   
     
 
-    if (!font.loadFromFile("Musicals.ttf")) {
+    if (!font.loadFromFile("Assets/font/Musicals.ttf")) {
         // Gestion des erreurs si la police ne peut pas être chargée
     }
 
-    if (!backgroundTexture.loadFromFile("../Assets/menu_fond.jpg"))
+    if (!backgroundTexture.loadFromFile("Assets/sprite/menu_fond.jpg"))
     {
         // Gestion des erreurs si l'image ne peut pas être chargée
         // 
