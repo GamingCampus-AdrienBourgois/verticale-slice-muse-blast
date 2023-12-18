@@ -38,7 +38,7 @@ void Player::initVariables()
 
 void Player::initTexture()
 {
-	if (!this->texturesheet.loadFromFile("Assets/sprite/joueur.png"))
+	if (!this->texturesheet.loadFromFile("Assets/sprite/SpriteTestRock.png"))
 	{
 		std::cout << "Error::player::image not load" << "\n";
 	}
@@ -48,7 +48,7 @@ void Player::initTexture()
 void Player::initSprite()
 {
 	this->sprite.setTexture(this->texturesheet);
-	this->currentFrame = sf::IntRect(0, 0, 69, 44);
+	this->currentFrame = sf::IntRect(0, 0, 44, 68);
 	this->sprite.setTextureRect(this->currentFrame);
 	this->sprite.setScale(2.5f, 2.5f);
 }
@@ -354,8 +354,8 @@ void Player::updateAnimation()
 		if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
 		{
 			this->currentFrame.top = 0.f;
-			this->currentFrame.left += 69.f;
-			if (this->currentFrame.left >= 414.f)
+			this->currentFrame.left += 44.f;
+			if (this->currentFrame.left >= 176.f)
 				this->currentFrame.left = 0;
 
 
@@ -368,9 +368,9 @@ void Player::updateAnimation()
 	{
 		if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
 		{
-			this->currentFrame.top = 44.f;
-			this->currentFrame.left += 69.f;
-			if (this->currentFrame.left >= 414.f)
+			this->currentFrame.top = 68.f;
+			this->currentFrame.left += 44.f;
+			if (this->currentFrame.left >= 176.f)
 				this->currentFrame.left = 0;
 
 
@@ -386,9 +386,9 @@ void Player::updateAnimation()
 	{
 		if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
 		{
-			this->currentFrame.top = 44.f;
-			this->currentFrame.left += 69.f;
-			if (this->currentFrame.left >= 414.f)
+			this->currentFrame.top = 68.f;
+			this->currentFrame.left += 44.f;
+			if (this->currentFrame.left >= 176.f)
 				this->currentFrame.left = 0;
 
 
@@ -397,7 +397,7 @@ void Player::updateAnimation()
 			
 		}
 		this->sprite.setScale(-2.5f, 2.5f);
-		this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 3.2f, 0.f);
+		this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0.f);
 	}
 }
 
