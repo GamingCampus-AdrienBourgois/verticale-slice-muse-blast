@@ -18,7 +18,6 @@
 #include "player.h"
 #include "enemy.h"
 #include "Level.h"
-#include "Ground.h"
 
 
 class Game {
@@ -39,7 +38,6 @@ private:
 
     //include
 
-	Ground* ground;
     Player* player;
     Enemy* enemy;
 	Level* level;
@@ -59,7 +57,6 @@ private:
 
     void initTime();
     void initWindow();
-    void initGround();
     void initLevel();
     void initPlayer();
     void initEnemy();
@@ -76,7 +73,6 @@ public:
     void updateCollision();
 	void updateGUI();
 	void update();
-    void renderGround();
     void renderLevel();
     void RenderPlayer();
     void RenderEnemy();

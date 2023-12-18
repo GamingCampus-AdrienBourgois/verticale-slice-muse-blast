@@ -31,6 +31,10 @@ void Level::initTexture()
     {
         std::cout << "Loading Backgroung" << "\n";
     }
+    if (!this->groundtexture.loadFromFile("Assets/sprite/texturesol1.png"))
+    {
+        std::cout << "Loading ground" << "\n";
+    }
 
 
 
@@ -63,6 +67,18 @@ void Level::initSprite()
     this->sprite1.setTexture(this->texturesheet);
     this->sprite1.setScale(2.5f, 2.5f);
     this->sprite1.setPosition(-1500.f, -100.f);
+
+    this->ground.setTexture(this->groundtexture);
+	this->ground.setScale(2.5f, 2.5f);
+    this->ground.setPosition(-500.f, 550.f);
+}
+
+void Level::initgroundhitbox()
+{
+    if (this->hitbox != nullptr) {
+        delete this->hitbox;
+    }
+    this->hitbox = new Hitbox(this->ground, 0.f, 0.f, this->ground.getGlobalBounds().width, this->ground.getGlobalBounds().height);
 }
 
 void Level::initMusic()
@@ -85,9 +101,10 @@ void Level::initmodificationlevel()
 
 Level::Level()
 {
-
+    
     this->initTexture();
     this->initSprite();
+    this->initgroundhitbox();
     this->initMusic();
     this->initmodificationlevel();
 }
@@ -99,6 +116,8 @@ Level::~Level()
 void Level::render(sf::RenderTarget& target)
 {
     target.draw(this->sprite1);
+    target.draw(this->ground);
+    this->hitbox->render(target);
 
 }
 

@@ -1,7 +1,10 @@
 #pragma once
+#include "hitbox.h"
 class Level
 {
 private:
+    
+    Hitbox* hitbox;
 
     int randomnumber;
 
@@ -18,10 +21,13 @@ private:
 
     sf::Sprite sprite1;
     sf::Texture texturesheet;
+    sf::Sprite ground;
+    sf::Texture groundtexture;
     sf::Music music;
 
     void initTexture();
     void initSprite();
+    void initgroundhitbox();
     void initMusic();
     void initmodificationlevel();
 

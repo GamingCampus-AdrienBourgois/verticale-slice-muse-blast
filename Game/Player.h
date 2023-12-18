@@ -51,12 +51,13 @@ private:
 	float velocityMin;
 	float acceleration;
 	float drag;
+	float velocityY;
 	float gravity;
 	float velocityMaxY;
 	float jumpVel;
 
 	bool isJumping;
-	bool isGrounded = false;
+	bool isGrounded;
 	float jumpHeight;
 	float jumpVelocity;
 	bool canDoubleJump;
@@ -85,6 +86,7 @@ public:
 	const sf::FloatRect getGlobalBounds() const;
 	const sf::FloatRect getHitbox() const;
 	const sf::Vector2f getPlayerCenter() const;
+	float getBottom() const;
 	const sf::Vector2f getHitboxCenter() const;
 	const sf::Vector2f normalize(const sf::Vector2f& vector) const;
 	const int& getHp() const;
@@ -99,14 +101,12 @@ public:
 	void resetVelocityY();
 	void resetVelocityX();
 
-
 	//function
 
 	
 
 	void resetAnimationTimer();
 	void move(const float dir_x, const float dir_y);
-	void jump();
 	void shoot();
 	void updatePhysics();
 	void updateMovement();
