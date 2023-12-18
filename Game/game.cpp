@@ -90,14 +90,20 @@ void Game::updateCollision()
 {
 	//collision bas fenetre
 
-	if (this->player->getHitbox().intersects(this->ground->getGlobalBounds()));
-	{
-		//this->player->resetVelocityY();
-		this->player->setPosition(
-			this->player->getPosition().x,
-			this->window.getSize().y - this->player->getGlobalBounds().height
-		);
-	}
+	if (this->player->getHitbox().intersects(sf::FloatRect(
+        this->Maincamera.getCenter().x - this->Maincamera.getSize().x / 2.f,
+        this->Maincamera.getCenter().y + this->Maincamera.getSize().y / 2.f - this->player->getGlobalBounds().height,
+        this->Maincamera.getSize().x,
+        this->player->getGlobalBounds().height
+    )))
+{
+    // Handle collision with the bottom of the view
+    this->player->resetVelocityY();
+    this->player->setPosition(
+        this->player->getPosition().x,
+        this->Maincamera.getCenter().y + this->Maincamera.getSize().y / 2.f - this->player->getGlobalBounds().height
+    );
+}
 
 	//collision player et enemy
 	if (this->player->getHitbox().intersects(this->enemy->getHitbox()))
@@ -147,12 +153,21 @@ void Game::update()
 		{
 			this->player->resetAnimationTimer();
 		}
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		{
+			this->player->shoot();
+		}
 			
 	}
 
 	this->updateCamera();
 
 	this->updatePlayer();
+
+	// Calculate the direction vector from player to mouse
+	sf::Vector2f mousePosWindow = sf::Vector2f(sf::Mouse::getPosition(this->window));
+	sf::Vector2f playerCenter = this->player->getPlayerCenter();
+	sf::Vector2f bulletDir = this->player->normalize(mousePosWindow - playerCenter);
 
 	this->updateEnemy();
 
@@ -161,6 +176,8 @@ void Game::update()
 	this->updateGUI();
 
 	this->window.setView(Maincamera);
+
+	this->player->setMousePosWindow(mousePosWindow);
 }
 
 void Game::renderGround()

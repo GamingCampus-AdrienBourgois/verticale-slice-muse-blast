@@ -32,7 +32,7 @@ private:
     sf::Clock timer;
 
     //bullet
-
+    sf::Vector2f mousePosWindow;
 
     //Level
 

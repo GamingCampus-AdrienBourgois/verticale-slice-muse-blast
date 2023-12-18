@@ -11,6 +11,7 @@
 
 #include "player.h"
 #include "Hitbox.h"
+#include "game.h"
 
 //bite
 
@@ -29,6 +30,10 @@ void Player::initVariables()
 	//vie
 	this->hpMax = 100;
 	this->hp = this->hpMax;
+
+	this->shootTimerMax = 10.f; // Adjust as needed
+	this->shootTimer = this->shootTimerMax;
+	this->canDoubleJump = true;
 }
 
 void Player::initTexture()
@@ -55,7 +60,7 @@ void Player::initphysics()
 	this->velocityMin = 1.f;
 	this->acceleration = 3.0f;
 	this->drag = 0.80f;
-	this->gravity = 1.f;
+	this->gravity = 4.f;
 	this->velocityMaxY = 15.f;
 	this->isJumping = false;
 	this->jumpVelocity = -12.0f; // Adjust the jump velocity as needed
@@ -63,7 +68,11 @@ void Player::initphysics()
 
 }
 
-
+void Player::initBullet()
+{
+	this->shootTimerMax = 10.f; // Adjust as needed
+	this->shootTimer = this->shootTimerMax;
+}
 
 Player::Player()
 {
@@ -74,6 +83,8 @@ Player::Player()
 	this->initSprite();
 	this->initphysics();
 	this->initHitbox();
+	this->initBullet();
+
 }
 
 Player::~Player()
@@ -103,6 +114,35 @@ const sf::FloatRect Player::getGlobalBounds() const
 const sf::FloatRect Player::getHitbox() const
 {
 	return this->hitbox->getGlobalBounds();
+}
+
+const sf::Vector2f Player::getPlayerCenter() const
+{
+	return sf::Vector2f(
+		this->sprite.getPosition().x + this->sprite.getGlobalBounds().width / 2.f,
+		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2.f
+	);
+}
+
+const sf::Vector2f Player::getHitboxCenter() const
+{
+	return sf::Vector2f(
+		this->hitbox->getGlobalBounds().left + this->hitbox->getGlobalBounds().width / 2.f,
+		this->hitbox->getGlobalBounds().top + this->hitbox->getGlobalBounds().height / 2.f
+	);
+}
+
+const sf::Vector2f Player::normalize(const sf::Vector2f& vector) const
+{
+	float length = std::sqrt(vector.x * vector.x + vector.y * vector.y);
+	if (length != 0.f)
+	{
+		return sf::Vector2f(vector.x / length, vector.y / length);
+	}
+	else
+	{
+		return vector;
+	}
 }
 
 const int& Player::getHp() const
@@ -137,6 +177,11 @@ void Player::setPosition(const float x, const float y)
 {
 	this->sprite.setPosition(x, y);
 
+}
+
+void Player::setMousePosWindow(const sf::Vector2f& mousePosWindow)
+{
+	this->mousePosWindow = mousePosWindow;
 }
 
 void Player::resetVelocityY()
@@ -185,13 +230,38 @@ void Player::move(const float dir_x, const float dir_y)
 void Player::jump()
 {
 
-	if (!this->isJumping && this->isGrounded)
+	if ((this->isGrounded || this->canDoubleJump) && !this->isJumping)
 	{
+		if (!this->isGrounded)
+		{
+			this->canDoubleJump = false; // If double jumping, set the flag to false
+		}
+
 		this->velocity.y = this->jumpVelocity;
 		this->isJumping = true;
 		this->isGrounded = false;
 	}
 }
+
+void Player::shoot()
+{
+	// Update player center based on the current player position
+	this->playercenter = sf::Vector2f(
+		this->sprite.getPosition().x + this->sprite.getGlobalBounds().width / 2.f,
+		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2.f
+	);
+
+	// Calculate the direction vector from player to mouse
+	this->bulletDir = normalize(this->mousePosWindow - this->playercenter);
+
+	// Start the bullet from the player's center
+	sf::Vector2f bulletStartPosition = this->playercenter;
+
+	// Create and add the bullet
+	this->bullets.push_back(Bullet(bulletStartPosition, this->bulletDir, 10.f)); // Adjust as needed
+}
+
+
 
 
 void Player::updatePhysics()
@@ -200,13 +270,28 @@ void Player::updatePhysics()
 
 	if (this->isJumping)
 	{
-		if (this->sprite.getPosition().y < (600 - this->jumpHeight))
+		if (this->sprite.getPosition().y > (600 - this->jumpHeight))
+		{
+			this->isGrounded = false;
+			this->velocity.y = 0.0f;
+		}
+		else
 		{
 			this->isJumping = false;
-			this->velocity.y = 0.0f;
 		}
 	}
 
+	// Apply gravity
+	if (!this->isGrounded)
+	{
+		this->velocity.y += 1.0 * this->gravity;
+
+		// Limit falling velocity
+		if (this->velocity.y > this->velocityMaxY)
+		{
+			this->velocity.y = this->velocityMaxY;
+		}
+	}
 
 	//deceleration
 	this->velocity *= this->drag;
@@ -218,6 +303,13 @@ void Player::updatePhysics()
 
 	if (std::abs(this->velocity.y) < this->velocityMin)
 		this->velocity.y = 0.f;
+
+	// Reset double jump when the player lands on the ground
+	if (this->isGrounded)
+	{
+		this->canDoubleJump = true;
+		this->velocity.y = 0.0f;
+	}
 
 	this->sprite.move(this->velocity);
 }
@@ -247,10 +339,6 @@ void Player::updateMovement()
 
 		
 	}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) //bas
-	//{
-	//	this->move(0.f, 1.f);
-	//}
 
 }
 
@@ -313,13 +401,32 @@ void Player::updateAnimation()
 	}
 }
 
-
 void Player::update()
-{
+{	
+	for (size_t i = 0; i < this->bullets.size(); ++i)
+	{
+		this->bullets[i].update();
+
+		// Remove out-of-screen bullets
+		if (this->bullets[i].getGlobalBounds().top + this->bullets[i].getGlobalBounds().height < 0.f)
+		{
+			this->bullets.erase(this->bullets.begin() + i);
+		}
+	}
 	this->updateAnimation();
 	this->updateMovement();
 	this->updatePhysics();
+	this->jump();
 	this->updateHitbox();
+
+}
+
+void Player::renderBullets(sf::RenderTarget& target)
+{
+	for (auto& bullet : this->bullets)
+	{
+		bullet.render(target);
+	}
 }
 
 void Player::render(sf::RenderTarget& target)
@@ -328,4 +435,5 @@ void Player::render(sf::RenderTarget& target)
 
 	if (this->hitbox)
 		this->hitbox->render(target);
+	this->renderBullets(target);
 }

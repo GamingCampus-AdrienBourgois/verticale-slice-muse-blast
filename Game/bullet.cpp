@@ -9,34 +9,34 @@
 #include<SFML/Window.hpp>
 #include<SFML/Network.hpp>
 
+// Bullet.cpp
+
 #include "Bullet.h"
 
-Bullet::Bullet()
+Bullet::Bullet(sf::Vector2f position, sf::Vector2f dir, float speed)
+    : direction(dir), movementSpeed(speed)
 {
-
-}
-
-Bullet::Bullet(sf::Texture& texture, float dir_X, float dir_Y, float movement_speed)
-{
-	this->shape.setTexture(texture);
-	this->direction.x = dir_X;
-	this->direction.y = dir_Y;
-	this->movementSpeed = movement_speed;
+    this->shape.setPosition(position);
+    this->shape.setRadius(5.f);
+    this->shape.setFillColor(sf::Color::Black);
 }
 
 Bullet::~Bullet()
 {
+}
 
-
+const sf::FloatRect Bullet::getGlobalBounds() const
+{
+    return this->shape.getGlobalBounds();
 }
 
 void Bullet::update()
 {
-	this->shape.move(this->movementSpeed * this->direction);
-
+    this->shape.move(this->direction * this->movementSpeed);
 }
 
-void Bullet::render(sf::RenderTarget* target)
+void Bullet::render(sf::RenderTarget& target)
 {
-	target->draw(this->shape);
+    target.draw(this->shape);
 }
+
