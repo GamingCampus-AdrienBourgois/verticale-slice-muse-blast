@@ -55,12 +55,14 @@ private:
 	float gravity;
 	float velocityMaxY;
 	float jumpVel;
+	float jumpDuration = 0.0f;
+	float jumpMaxDuration = 10.0f;
 
-	bool isJumping;
+	bool isJumping = false;
 	bool isGrounded;
 	float jumpHeight;
 	float jumpVelocity;
-	bool canDoubleJump;
+	int numberofjump;
 
 
 	//health
@@ -93,7 +95,7 @@ public:
 	const int& getHpMax() const;
 	//modifiers
 
-
+	void setJump(const int jump);
 	void setHp(const int hp);
 	void loseHp(const int value);
 	void setPosition(const float x, const float y);

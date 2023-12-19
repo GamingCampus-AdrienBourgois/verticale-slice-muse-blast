@@ -82,7 +82,16 @@ void Game::updateEnemy()
 
 void Game::updateCollision()
 {
-
+	//collision player ground
+	if (this->player->getHitbox().intersects(this->level->getHitbox()))
+	{
+		this->player->resetVelocityY();
+		this->player->setPosition(
+			this->player->getPosition().x,
+			this->level->getHitbox().top - this->player->getHitbox().height
+		);
+		this->player->setJump(1);
+	}
 
 
 	//collision player et enemy

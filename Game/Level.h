@@ -37,6 +37,9 @@ public:
     Level();
     virtual ~Level();
 
+    //accesor 
+    const sf::FloatRect getHitbox() const;
+
     void level_effect();
     void render(sf::RenderTarget& target);
 };

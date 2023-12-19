@@ -122,6 +122,11 @@ void Level::render(sf::RenderTarget& target)
 }
 
 
+const sf::FloatRect Level::getHitbox() const
+{
+    return this->hitbox->getGlobalBounds();
+}
+
 void Level::level_effect()
 {
     if (this->randomnumber == 1)

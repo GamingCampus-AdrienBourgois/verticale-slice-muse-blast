@@ -13,7 +13,6 @@
 #include "Hitbox.h"
 #include "game.h"
 
-//bite
 
 void Player::initAnimation()
 {
@@ -33,7 +32,6 @@ void Player::initVariables()
 
 	this->shootTimerMax = 10.f; // Adjust as needed
 	this->shootTimer = this->shootTimerMax;
-	this->canDoubleJump = true;
 }
 
 void Player::initTexture()
@@ -60,9 +58,10 @@ void Player::initphysics()
 	this->velocityMin = 1.f;
 	this->acceleration = 3.0f;
 	this->drag = 0.80f;
-	this->gravity = 0.5f;
+	this->gravity = 4.f;
 	this->velocityY = 0.f;
 	this->velocityMaxY = 15.f;
+	this->jumpHeight = 15.f;
 
 }
 
@@ -106,7 +105,7 @@ const sf::Vector2f Player::getPosition() const
 
 const sf::FloatRect Player::getGlobalBounds() const
 {
-	return this->sprite.getGlobalBounds();
+	return this->hitbox->getGlobalBounds();
 }
 
 const sf::FloatRect Player::getHitbox() const
@@ -164,6 +163,11 @@ const int& Player::getHpMax() const
 //modifier
 
 
+void Player::setJump(const int jump)
+{
+	this->numberofjump = jump;
+}
+
 void Player::setHp(const int hp)
 {
 	this->hp = hp;
@@ -203,9 +207,9 @@ void Player::resetVelocityX()
 void Player::initHitbox()
 {
 	float offset_x = 30.0f;
-	float offset_y = 28.0f;
+	float offset_y = 0.f;
 	float width = 69.0f;
-	float height = 142.0f;
+	float height = 167.0f;
 
 	this->hitbox = new Hitbox(this->sprite, offset_x, offset_y, width, height);
 }
@@ -225,6 +229,21 @@ void Player::move(const float dir_x, const float dir_y)
 	if (std::abs(this->velocity.x) > this->velocityMax)
 	{
 		this->velocity.x = this->velocityMax * ((this->velocity.x < 0.f) ? -1.f : 1.f);
+	}
+
+	//jump
+
+	if (dir_y < 0.f && !this->isJumping)
+	{
+		this->velocity.y = -this->jumpHeight;
+		this->isJumping = true;
+		std::cout << "Player jump!" << std::endl;
+	}
+
+	// Limit falling speed
+	if (this->velocity.y > this->velocityMaxY)
+	{
+		this->velocity.y = this->velocityMaxY;
 	}
 }
 
@@ -254,6 +273,20 @@ void Player::updatePhysics()
 
 	// Deceleration
 	this->velocity *= this->drag;
+
+	//jump physic
+
+	if (this->isJumping)
+	{
+		this->jumpDuration += 1.0f;
+		this->velocity.y += -this->jumpHeight * (1.0f - this->jumpDuration / this->jumpMaxDuration);
+		if (this->jumpDuration >= this->jumpMaxDuration)
+		{
+			this->isJumping = false;
+			this->jumpDuration = 0.0f;
+		}
+	}
+
 
 	//limite falling speed
 	if (this->velocity.y > this->velocityMaxY)
@@ -286,11 +319,11 @@ void Player::updateMovement()
 		this->animationState = MOVING_LEFT;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) //haut
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && this->numberofjump == 1) //haut
 	{
+		this->move(0.f, -1.f);
 		this->animationState = JUMPING;
-
-		
+		this->numberofjump = 0;
 	}
 }
 
