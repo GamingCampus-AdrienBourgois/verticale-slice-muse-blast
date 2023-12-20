@@ -42,7 +42,6 @@ private:
     Player* player;
     Enemy* enemy;
     class Level* level;
-    class Bullet* bullet;
 
 
     //player GUI

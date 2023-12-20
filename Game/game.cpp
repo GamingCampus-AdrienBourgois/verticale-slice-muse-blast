@@ -111,14 +111,6 @@ void Game::updateCollision()
 
 	//collision bullet and enemy
 
-	if (this->bullet->getHitbox().intersects(this->enemy->getHitbox()))
-	{
-		// Bullet hit enemy, destroy the enemy
-		delete this->enemy;
-		this->enemy = nullptr;
-		// Remove the bullet
-	}
-
 }
 
 
