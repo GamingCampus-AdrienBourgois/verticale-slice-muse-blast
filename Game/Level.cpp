@@ -141,38 +141,6 @@ void Level::level_effect()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const sf::FloatRect Level::getHitbox() const
 {
     return this->hitbox->getGlobalBounds();

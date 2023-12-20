@@ -11,6 +11,7 @@
 
 #include "player.h"
 #include "Hitbox.h"
+#include"bullet.h"
 #include "game.h"
 
 

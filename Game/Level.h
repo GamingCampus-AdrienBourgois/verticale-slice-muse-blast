@@ -1,6 +1,6 @@
 #pragma once
 #include "hitbox.h"
-
+#include "game.h"
 class Level
 {
 private:

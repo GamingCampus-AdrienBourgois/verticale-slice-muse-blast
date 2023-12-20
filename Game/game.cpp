@@ -10,6 +10,7 @@
 #include<SFML/Window.hpp>
 #include<SFML/Network.hpp>
 #include "Game.h"
+#include"bullet.h"
 
 void Game::initGUI()
 {
@@ -108,6 +109,16 @@ void Game::updateCollision()
 		}
 	}
 
+	//collision bullet and enemy
+
+	if (this->bullet->getHitbox().intersects(this->enemy->getHitbox()))
+	{
+		// Bullet hit enemy, destroy the enemy
+		delete this->enemy;
+		this->enemy = nullptr;
+		// Remove the bullet
+	}
+
 }
 
 
@@ -146,9 +157,18 @@ void Game::update()
 		{
 			this->player->resetAnimationTimer();
 		}
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && this->shootTimer.getElapsedTime() >= sf::seconds(1.0f))
 		{
-			this->player->shoot();
+			sf::Vector2f mousePosWindow = sf::Vector2f(sf::Mouse::getPosition(this->window));
+			sf::Vector2f mousePosWorld = this->window.mapPixelToCoords(sf::Vector2i(mousePosWindow));
+			this->player->setMousePosWindow(mousePosWorld);
+
+			if (this->shootTimer.getElapsedTime() >= sf::seconds(1.0f))
+			{
+				this->player->shoot();
+
+				this->shootTimer.restart();
+			}
 		}
 			
 	}

@@ -18,6 +18,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "Level.h"
+#include "bullet.h"
 
 
 class Game {
@@ -32,7 +33,7 @@ private:
 
     //bullet
     sf::Vector2f mousePosWindow;
-
+   sf::Clock shootTimer;
     //Level
 
 
@@ -40,7 +41,8 @@ private:
 
     Player* player;
     Enemy* enemy;
-	Level* level;
+    class Level* level;
+    class Bullet* bullet;
 
 
     //player GUI
