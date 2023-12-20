@@ -1,0 +1,8 @@
+changez propriété du projet pour afficher les sprite :
+alt + entré 
+toute les configuration
+debogage
+repertoire de travail
+remplacé $(ProjectDir) par $(SolutionDir)
+
+copier coller le fichier OPEN32.DLL qui se trouve dans le fichier museblast dans le fichier x64/debug
