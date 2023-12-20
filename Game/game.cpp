@@ -114,8 +114,12 @@ void Game::updateCollision()
 void Game::updateGUI()
 {
 	//update player GUI POSITION
-	this->healthbar.setPosition(sf::Vector2f(this->Maincamera.getCenter().x - 800.f, this->Maincamera.getCenter().y - 280.f));
-	this->healthbarback.setPosition(sf::Vector2f(this->Maincamera.getCenter().x - 803.f, this->Maincamera.getCenter().y - 283.f));
+	this->healthbar.setPosition(sf::Vector2f(this->Maincamera.getCenter().x - 790.f, this->Maincamera.getCenter().y - 290.f));
+	this->healthbarback.setPosition(sf::Vector2f(this->Maincamera.getCenter().x - 793.f, this->Maincamera.getCenter().y - 293.f));
+	this->level->hp_sprite.setPosition(sf::Vector2f(this->Maincamera.getCenter().x - 850.f, this->Maincamera.getCenter().y - 295.f));
+	this->level->musique_sprite.setPosition(sf::Vector2f(this->Maincamera.getCenter().x - 480.f, this->Maincamera.getCenter().y - 295.f));
+
+
 
 	//update player GUI
 	this->player->setHp(100);
