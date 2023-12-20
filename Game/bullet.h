@@ -11,12 +11,16 @@ private:
     sf::Vector2f direction;
     float movementSpeed;
 
+    Hitbox* hitbox;
     void initTexture();
     void initsprite();
+    void initHitbox();
+
 public:
     Bullet(sf::Vector2f position, sf::Vector2f dir, float speed);
     virtual ~Bullet();
 
+    const sf::FloatRect getHitbox() const;
     const sf::FloatRect getGlobalBounds() const;
 
     void updateHitbox();

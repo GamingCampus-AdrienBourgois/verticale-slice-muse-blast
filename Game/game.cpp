@@ -109,7 +109,7 @@ void Game::updateCollision()
 		}
 	}
 
-	//collision bullet and enemy
+	////collision bullet and enemy
 
 }
 

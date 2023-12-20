@@ -42,7 +42,7 @@ private:
     Player* player;
     Enemy* enemy;
     class Level* level;
-
+    std::vector<Bullet> bullets;
 
     //player GUI
 
