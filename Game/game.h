@@ -35,9 +35,13 @@ private:
 	sf::Clock shootdelay;
 
     //Level
+    unsigned int killCount;
+    sf::Font font;
+    sf::Text killCountText;
+
 
     //bullet
-    float cooldown = 0.25f;
+    float cooldown = 1.f;
     std::vector<Bullet*> bullets;
     std::map<std::string, sf::Texture*> texture;
     sf::Vector2f mousePosWindow;

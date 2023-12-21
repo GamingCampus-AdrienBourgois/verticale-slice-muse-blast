@@ -25,7 +25,7 @@ void Enemy::initVariables()
     this->speed = 2.f;
     this->hp = 100.f;
     this->hasShield = false;
-    this->followDistance = 500.f;
+    this->followDistance = 750.f;
 }
 
 void Enemy::initTexture()
@@ -237,11 +237,11 @@ void Enemy::followplayer(const sf::Vector2f& playerPosition)
         // Determine the direction to move towards the player
         if (playerPosition.x > this->sprite.getPosition().x)
         {
-            this->direction.x = 1.f; // Move towards the player on the right
+            this->direction.x = 5.f; // Move towards the player on the right
         }
         else if (playerPosition.x < this->sprite.getPosition().x)
         {
-            this->direction.x = -1.f; // Move towards the player on the left
+            this->direction.x = -5.f; // Move towards the player on the left
         }
     }
 }

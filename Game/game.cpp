@@ -59,19 +59,19 @@ void Game::spawnEnemy()
 	int playerOffset = 400;  // Minimum distance from the player
 
 	// Spawn the first enemy with an offset
-	this->enemies.push_back(new Enemy(playerOffset, 340, false));
 
 	// Spawn the remaining enemies at regular intervals
 	for (int i = 1; i < numEnemies; ++i)
 	{
 		int xPos = playerOffset + i * spacing;
-		this->enemies.push_back(new Enemy(xPos, 340, false));
+		this->enemies.push_back(new Enemy(750 + xPos, 340, false));
 	}
 }
 
 
 Game::Game()
 {
+	this->killCount = 0;
 	this->initTextureBullet();
 	this->initTime();
 	this->initWindow();
@@ -146,6 +146,10 @@ void Game::updateGUI()
 	this->player->setHp(100);
 	float hppercent = static_cast<float>(this->player->getHp()) / this->player->getHpMax();
 	this->healthbar.setSize(sf::Vector2f(300.f * hppercent, this->healthbar.getSize().y));
+
+	//update 
+
+	this->killCountText.setString("Kills: " + std::to_string(this->killCount));
 
 }
 
@@ -225,6 +229,7 @@ void Game::updateEnemy()
 
 				--Ecounter;
 				--Bcounter;
+				++this->killCount;
 				break; // Exit the bullet loop since the bullet has been removed
 			}
 		}
@@ -302,6 +307,7 @@ void Game::renderGUI()
 {
 	this->window.draw(this->healthbarback);
 	this->window.draw(this->healthbar);
+	this->window.draw(this->killCountText);
 }
 
 void Game::render()
