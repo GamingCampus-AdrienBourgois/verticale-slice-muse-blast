@@ -31,6 +31,7 @@ private:
 
     sf::Sprite background_sprite;
     sf::Texture background_texture;
+    sf::Texture Playersprite;
     sf::Texture hp_texture;
     sf::Texture musique_texture;
     sf::Music music;
@@ -50,7 +51,7 @@ public:
 
     //accesor 
     const sf::FloatRect getHitbox() const;
-
+    const sf::Texture& getPlayerSprite() const;
     sf::Sprite hp_sprite;
     sf::Sprite musique_sprite;
     void initmodificationlevel();

@@ -2,6 +2,7 @@
 #include<map>
 #include "hitbox.h"
 #include "bullet.h"
+#include "Level.h"
 enum PLAYER_ANIMATION_STATES 
 {
 	IDLE = 0,
@@ -25,7 +26,9 @@ private:
 	sf::Texture health;
 
 	//animation
+	int randomnumber;
 
+	class Level* level;
 	short animationState;
 	sf::IntRect currentFrame;
 	bool animationswitch;

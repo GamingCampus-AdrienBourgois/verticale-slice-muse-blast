@@ -37,10 +37,14 @@ void Level::initTexture()
         std::cout << "Loading ground" << "\n";
     }
 
-    if (!this->musique_texture.loadFromFile("Assets/sprite/musique" + std::to_string(this->randomnumber) + ".png")) {
-            std::cout << "Loading Icone" << "\n";
-        }
-  
+    if (!this->musique_texture.loadFromFile("Assets/sprite/musique" + std::to_string(this->randomnumber) + ".png")) 
+    {
+        std::cout << "Loading Icone" << "\n";
+    }
+    if (!this->Playersprite.loadFromFile("Assets/sprite/SpritePlayer"+ std::to_string(this->randomnumber) + ".png"))
+    {
+        std::cout << "Error::player::image not load" << "\n";
+    }
 
     //Icones
     if (!this->hp_texture.loadFromFile("Assets/sprite/hp.png"))
@@ -145,3 +149,9 @@ const sf::FloatRect Level::getHitbox() const
 {
     return this->hitbox->getGlobalBounds();
 }
+
+const sf::Texture& Level::getPlayerSprite() const
+{
+    return this->Playersprite;
+}
+

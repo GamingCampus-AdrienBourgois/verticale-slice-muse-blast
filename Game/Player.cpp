@@ -2,6 +2,9 @@
 #include<ctime>
 #include<iostream>
 #include<time.h>
+#include <string>
+#include <random>
+
 
 #include<SFML/System.hpp>
 #include<SFML/Graphics.hpp>
@@ -34,7 +37,15 @@ void Player::initVariables()
 
 void Player::initTexture()
 {
-	if (!this->texturesheet.loadFromFile("Assets/sprite/SpriterockArme.png"))
+	std::random_device rd;
+
+	std::mt19937 gen(rd());
+
+	std::uniform_int_distribution<> dis(1, 4);
+
+	this->randomnumber = dis(gen);
+
+	if (!this->texturesheet.loadFromFile("Assets/sprite/SpritePlayer" + std::to_string(this->randomnumber) + ".png"))
 	{
 		std::cout << "Error::player::image not load" << "\n";
 	}
@@ -357,6 +368,22 @@ void Player::updateAnimation()
 		}
 		this->sprite.setScale(-2.5f, 2.5f);
 		this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0.f);
+	}
+	else if (this->animationState == JUMPING)
+	{
+		if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
+		{
+			this->currentFrame.top = 144.f;
+			this->currentFrame.left += 48.f;
+			if (this->currentFrame.left >= 288.f)
+				this->currentFrame.left = 0;
+
+
+			this->animationtimer.restart();
+			this->sprite.setTextureRect(this->currentFrame);
+
+		}
+		this->sprite.setScale(2.5f, 2.5f);
 	}
 }
 

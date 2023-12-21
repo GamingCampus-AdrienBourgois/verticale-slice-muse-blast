@@ -28,7 +28,7 @@ void Enemy::initVariables()
 
 void Enemy::initTexture()
 {
-    if (!this->texture.loadFromFile("Assets/Sprite/Enemyidle.png")) { // IMAGE A CHANGER QUAND ON AURA TROUVE
+    if (!this->texture.loadFromFile("Assets/Sprite/Idle.png")) { // IMAGE A CHANGER QUAND ON AURA TROUVE
         std::cerr << "Error::Enemy::initSprite::Texture not loaded" << std::endl;
     }
 }
@@ -37,7 +37,7 @@ void Enemy::initTexture()
 void Enemy::initSprite() 
 {
     this->sprite.setTexture(this->texture);
-    this->currentFrame = sf::IntRect(0, 0, 128, 128);
+    this->currentFrame = sf::IntRect(30, 50, 78, 76);
     this->sprite.setTextureRect(this->currentFrame);
     this->sprite.setScale(2.5f, 2.5f);
 }
@@ -129,7 +129,7 @@ void Enemy::takeDamage(float damage)
 
 void Enemy::movement() 
 {
-    this->animationState = IDLE;
+    this->animationState = ENEMY_IDLE;
     if (rand() % 100 < 1) // Adjust the percentage as needed
     {
         // Generate a random horizontal direction
@@ -138,26 +138,74 @@ void Enemy::movement()
     }
 
     // Move the enemy horizontally
-    this->sprite.move(this->speed * this->direction.x, 0.f);
+    float horizontalMovement = this->speed * this->direction.x;
+    this->sprite.move(horizontalMovement, 0.f);
 
+    if (horizontalMovement > 0) {
+        // Moving to the right
+        this->animationState = ENEMY_MOVING_RIGHT;
+    }
+    else if (horizontalMovement < 0) {
+        // Moving to the left
+        this->animationState = ENEMY_MOVING_LEFT;
+    }
+    else {
+        // Not moving horizontally
+        this->animationState = ENEMY_IDLE;
+    }
 }
 
 void Enemy::updateAnimation()
 {
-    if (this->animationState == IDLE)
+    if (this->animationState == ENEMY_IDLE)
     {
         if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
         {
-            this->currentFrame.top = 0.f;
-            this->currentFrame.left += 48.f;
-            if (this->currentFrame.left >= 288.f)
-                this->currentFrame.left = 0;
+            this->currentFrame.top = 50.f;
+            this->currentFrame.left += 128.f;
+            if (this->currentFrame.left >= 640.f)
+                this->currentFrame.left = 30;
 
 
             this->animationtimer.restart();
             this->sprite.setTextureRect(this->currentFrame);
         }
 
+    }
+    else if (this->animationState == ENEMY_MOVING_RIGHT)
+    {
+        if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
+        {
+            this->currentFrame.top = 50.f;
+            this->currentFrame.left += 128.f;
+            if (this->currentFrame.left >= 640.f)
+                this->currentFrame.left = 30;
+
+
+            this->animationtimer.restart();
+            this->sprite.setTextureRect(this->currentFrame);
+
+        }
+        this->sprite.setScale(2.5f, 2.5f);
+        this->sprite.setOrigin(0.f, 0.f);
+    }
+
+    else if (this->animationState == ENEMY_MOVING_LEFT)
+    {
+        if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
+        {
+            this->currentFrame.top = 50.f;
+            this->currentFrame.left += 128.f;
+            if (this->currentFrame.left >= 640.f)
+                this->currentFrame.left = 30;
+
+
+            this->animationtimer.restart();
+            this->sprite.setTextureRect(this->currentFrame);
+
+        }
+        this->sprite.setScale(-2.5f, 2.5f);
+        this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0.f);
     }
 }
 

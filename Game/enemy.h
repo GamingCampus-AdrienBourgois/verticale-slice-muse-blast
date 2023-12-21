@@ -5,11 +5,11 @@
 
 enum ENEMY_ANIMATION_STATES
 {
-    IDLE = 0,
-    MOVING_LEFT = 1,
-    MOVING_RIGHT = 2,
-    GETDAMAGED = 3,
-    DEAD = 4
+    ENEMY_IDLE = 0,
+    ENEMY_MOVING_LEFT = 1,
+    ENEMY_MOVING_RIGHT = 2,
+    ENEMY_GETDAMAGED = 3,
+    ENEMY_DEAD = 4
 };
 
 class Enemy {

@@ -20,6 +20,7 @@
 #include "enemy.h"
 #include "Level.h"
 #include "bullet.h"
+#include "Gameovermenu.h"
 
 
 class Game {
@@ -47,7 +48,7 @@ private:
 
     //include
 
-    Player* player;
+    class Player* player;
     class Level* level;
 
     //player GUI
@@ -87,7 +88,6 @@ public:
 	void update();
     void renderLevel();
     void RenderPlayer();
-    void RenderEnemy();
     void renderGUI();
 	void render();
     const sf::RenderWindow& getWindow() const;

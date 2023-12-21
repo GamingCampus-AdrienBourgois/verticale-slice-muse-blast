@@ -56,11 +56,16 @@ void Game::spawnEnemy()
 {
 	int numEnemies = 37;
 	int spacing = 250;
+	int playerOffset = 400;  // Minimum distance from the player
 
-	for (int i = 0; i < numEnemies; ++i)
+	// Spawn the first enemy with an offset
+	this->enemies.push_back(new Enemy(playerOffset, 340, false));
+
+	// Spawn the remaining enemies at regular intervals
+	for (int i = 1; i < numEnemies; ++i)
 	{
-		int xPos = i * spacing;
-		this->enemies.push_back(new Enemy(xPos, 300, false));
+		int xPos = playerOffset + i * spacing;
+		this->enemies.push_back(new Enemy(xPos, 340, false));
 	}
 }
 
@@ -210,6 +215,19 @@ void Game::updateEnemy()
 			}
 		}
 		++Ecounter;
+
+		if (enemy->getbound().intersects(this->player->getHitbox()))
+		{
+			if (this->timer.getElapsedTime() >= this->hitdelay)
+			{
+				std::cout << "Player collided with enemy!" << std::endl;
+
+				this->player->loseHp(-10);
+
+				// Reset the hit delay timer
+				this->timer.restart();
+			}
+		}
 	}
 }
 
