@@ -30,9 +30,6 @@ void Player::initVariables()
 	//vie
 	this->hpMax = 100;
 	this->hp = this->hpMax;
-
-	this->shootTimerMax = 10.f; // Adjust as needed
-	this->shootTimer = this->shootTimerMax;
 }
 
 void Player::initTexture()
@@ -66,12 +63,6 @@ void Player::initphysics()
 
 }
 
-void Player::initBullet()
-{
-	this->shootTimerMax = 10.f; // Adjust as needed
-	this->shootTimer = this->shootTimerMax;
-}
-
 Player::Player()
 {
 	
@@ -81,7 +72,6 @@ Player::Player()
 	this->initSprite();
 	this->initphysics();
 	this->initHitbox();
-	this->initBullet();
 
 }
 
@@ -248,24 +238,6 @@ void Player::move(const float dir_x, const float dir_y)
 	}
 }
 
-void Player::shoot()
-{
-	// Update player center based on the current player position
-	this->playercenter = sf::Vector2f(
-		this->sprite.getPosition().x + this->sprite.getGlobalBounds().width / 2.f,
-		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2.f
-	);
-
-	// Calculate the direction vector from player to mouse
-	this->bulletDir = normalize(this->mousePosWindow - this->playercenter);
-
-	// Start the bullet from the player's center
-	sf::Vector2f bulletStartPosition = this->playercenter;
-
-	// Create and add the bullet
-	this->bullets.push_back(Bullet(bulletStartPosition, this->bulletDir, 10.f)); // Adjust as needed
-}
-
 void Player::updatePhysics()
 {
 	//gravity
@@ -390,29 +362,11 @@ void Player::updateAnimation()
 
 void Player::update()
 {	
-	for (size_t i = 0; i < this->bullets.size(); ++i)
-	{
-		this->bullets[i].update();
-
-		// Remove out-of-screen bullets
-		if (this->bullets[i].getGlobalBounds().top + this->bullets[i].getGlobalBounds().height < 0.f)
-		{
-			this->bullets.erase(this->bullets.begin() + i);
-		}
-	}
 	this->updateAnimation();
 	this->updateMovement();
 	this->updatePhysics();
 	this->updateHitbox();
 
-}
-
-void Player::renderBullets(sf::RenderTarget& target)
-{
-	for (auto& bullet : this->bullets)
-	{
-		bullet.render(target);
-	}
 }
 
 void Player::render(sf::RenderTarget& target)
@@ -421,5 +375,4 @@ void Player::render(sf::RenderTarget& target)
 
 	if (this->hitbox)
 		this->hitbox->render(target);
-	this->renderBullets(target);
 }

@@ -11,76 +11,42 @@
 
 // Bullet.cpp
 #include "Bullet.h"
-#include "hitbox.h"
 
-
-
-
-void Bullet::initTexture()
+Bullet::Bullet()
 {
-    if (!this->texturesheet.loadFromFile("Assets/sprite/HP.png"))
-    {
-        std::cout << "Error::bullet::image not load" << "\n";
-    }
 }
 
-void Bullet::initsprite()
+Bullet::Bullet(sf::Texture * texture, float pos_x, float pos_y, float dir_x, float dir_y, float movement_speed)
 {
-    this->sprite.setTexture(this->texturesheet);
-    this->sprite.setScale(0.5f, 0.5f);
-}
+	this->sprite.setTexture(*texture);
 
-void Bullet::initHitbox()
-{
-    float offset_x = 30.0f;
-    float offset_y = 28.0f;
-    float width = 69.0f;
-    float height = 150.0f;
+	this->sprite.setPosition(pos_x, pos_y);
+	this->direction.x = dir_x;
+	this->direction.y = dir_y;
+	this->movementSpeed = movement_speed;
 
-    this->hitbox = new Hitbox(this->sprite, offset_x, offset_y, width, height);
-}
-
-Bullet::Bullet(sf::Vector2f position, sf::Vector2f dir, float speed)
-    : direction(dir), movementSpeed(speed)
-{
-    this->sprite.setPosition(position);
-    this->initTexture();
-    this->initsprite();
-    this->initHitbox();
 }
 
 Bullet::~Bullet()
 {
-    if (this->hitbox != nullptr)
-    {
-        delete this->hitbox;
-        this->hitbox = nullptr; // Set to nullptr after deleting
-    }
+
+
 }
 
-const sf::FloatRect Bullet::getGlobalBounds() const
+const sf::FloatRect Bullet::getbound() const
 {
-    return this->sprite.getGlobalBounds();
-}
-const sf::FloatRect Bullet::getHitbox() const
-{
-    return this->hitbox->getGlobalBounds();
-}
-
-void Bullet::updateHitbox()
-{
-    this->hitbox->update();
+	return this->sprite.getGlobalBounds();
 }
 
 void Bullet::update()
 {
-    this->sprite.move(this->direction * this->movementSpeed);
-    this->updateHitbox();
+	//movement
+	this->sprite.move(this->movementSpeed * this->direction);
+
 }
 
 void Bullet::render(sf::RenderTarget& target)
 {
-    target.draw(this->sprite);
-        this->hitbox->render(target);
-}
+	target.draw(this->sprite);
 
+}

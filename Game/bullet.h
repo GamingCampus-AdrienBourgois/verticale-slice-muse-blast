@@ -2,28 +2,22 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
-#include"hitbox.h"
 class Bullet
 {
 private:
     sf::Sprite sprite;
-    sf::Texture texturesheet;
     sf::Vector2f direction;
     float movementSpeed;
 
-    Hitbox* hitbox;
-    void initTexture();
-    void initsprite();
-    void initHitbox();
-
 public:
-    Bullet(sf::Vector2f position, sf::Vector2f dir, float speed);
+    Bullet();
+    Bullet(sf::Texture* texture, float pos_x, float pos_y, float dir_x, float dir_y, float movement_speed);
     virtual ~Bullet();
 
-    const sf::FloatRect getHitbox() const;
-    const sf::FloatRect getGlobalBounds() const;
+    //access
 
-    void updateHitbox();
+    const sf::FloatRect getbound() const;
+
     void update();
     void render(sf::RenderTarget& target);
 };

@@ -26,6 +26,12 @@ void Game::initGUI()
 
 }
 
+void Game::initTextureBullet()
+{
+	this->texture["bullet"] = new sf::Texture();
+	this->texture["bullet"]->loadFromFile("Assets/sprite/bulletsprite.jpg");
+}
+
 void Game::initTime()
 {
 	this->hitdelay = sf::seconds(1.0f);
@@ -53,6 +59,7 @@ void Game::initEnemy()
 
 Game::Game()
 {
+	this->initTextureBullet();
 	this->initTime();
 	this->initWindow();
 	this->initLevel();
@@ -64,6 +71,14 @@ Game::Game()
 Game::~Game()
 {
 	delete this->player;
+	for (auto& i : this->texture)
+	{
+		delete i.second;
+	}
+	/*for (auto *i : this->bullet)
+	{
+		delete i;
+	}*/
 }
 
 void Game::updatePlayer()
@@ -111,6 +126,15 @@ void Game::updateCollision()
 
 	////collision bullet and enemy
 
+	for (size_t i = 0; i < this->bullets.size(); i++)
+	{
+		if (this->bullets[i]->getbound().intersects(this->enemy->getHitbox()))
+		{
+			this->bullets.erase(this->bullets.begin() + i);
+			delete enemy;
+		}
+	}
+
 }
 
 
@@ -131,6 +155,60 @@ void Game::updateGUI()
 
 }
 
+void Game::updateInput()
+{
+	if (shootTimer.getElapsedTime().asSeconds() >= cooldown) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+			// Get the mouse position in window coordinates
+			sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+			// Convert mouse position to world coordinates
+			sf::Vector2f worldMousePos = window.mapPixelToCoords(mousePosition);
+
+			// Calculate the direction vector from player to mouse
+			float directionX = worldMousePos.x - this->player->getPosition().x;
+			float directionY = worldMousePos.y - this->player->getPosition().y;
+
+			// Normalize the direction vector
+			float magnitude = std::sqrt(directionX * directionX + directionY * directionY);
+			if (magnitude != 0) {
+				directionX /= magnitude;
+				directionY /= magnitude;
+			}
+
+			// Create a new bullet with the calculated direction as velocity
+			this->bullets.push_back(new Bullet(
+				this->texture["bullet"],
+				this->player->getPosition().x,
+				this->player->getPosition().y,
+				directionX,
+				directionY,
+				5.f
+			));
+
+			// Restart the shoot timer
+			shootTimer.restart();
+		}
+	}
+}
+
+void Game::updateBullet()
+{
+	unsigned counter = 0;
+	for (auto *bullet : this->bullets)
+	{
+		bullet->update();
+
+		if (bullet->getbound().top + bullet->getbound().height < 0.f)
+		{
+			delete this->bullets.at(counter);
+			this->bullets.erase(this->bullets.begin() + counter);
+			--counter;
+		}
+		++counter;
+	}
+}
+
 void Game::update()
 {
 	while (this->window.pollEvent(this->ev))
@@ -148,31 +226,16 @@ void Game::update()
 			)
 		{
 			this->player->resetAnimationTimer();
-		}
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && this->shootTimer.getElapsedTime() >= sf::seconds(1.0f))
-		{
-			sf::Vector2f mousePosWindow = sf::Vector2f(sf::Mouse::getPosition(this->window));
-			sf::Vector2f mousePosWorld = this->window.mapPixelToCoords(sf::Vector2i(mousePosWindow));
-			this->player->setMousePosWindow(mousePosWorld);
-
-			if (this->shootTimer.getElapsedTime() >= sf::seconds(1.0f))
-			{
-				this->player->shoot();
-
-				this->shootTimer.restart();
-			}
-		}
-			
+		}		
 	}
 
 	this->updateCamera();
 
 	this->updatePlayer();
 
-	// Calculate the direction vector from player to mouse
-	sf::Vector2f mousePosWindow = sf::Vector2f(sf::Mouse::getPosition(this->window));
-	sf::Vector2f playerCenter = this->player->getPlayerCenter();
-	sf::Vector2f bulletDir = this->player->normalize(mousePosWindow - playerCenter);
+	this->updateInput();
+
+	this->updateBullet();
 
 	this->updateEnemy();
 
@@ -215,6 +278,10 @@ void Game::render()
 	this->window.clear();
 	this->renderLevel();
 	this->RenderPlayer();
+	for (auto* bullet : this->bullets)
+	{
+		bullet->render(this->window);
+	}
 	this->RenderEnemy();
 	this->renderGUI();
 	

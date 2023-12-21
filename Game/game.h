@@ -4,6 +4,7 @@
 #include<iostream>
 #include<time.h>
 
+#include<map>
 #include<SFML/System.hpp>
 #include<SFML/Graphics.hpp>
 #include<SFML/Audio.hpp>
@@ -30,11 +31,16 @@ private:
 	sf::Texture tilesheet;
     sf::Time hitdelay;
     sf::Clock timer;
+	sf::Clock shootdelay;
+
+    //Level
 
     //bullet
+    float cooldown = 0.25f;
+    std::vector<Bullet*> bullets;
+    std::map<std::string, sf::Texture*> texture;
     sf::Vector2f mousePosWindow;
-   sf::Clock shootTimer;
-    //Level
+    sf::Clock shootTimer;
 
 
     //include
@@ -42,7 +48,6 @@ private:
     Player* player;
     Enemy* enemy;
     class Level* level;
-    std::vector<Bullet> bullets;
 
     //player GUI
 
@@ -56,6 +61,8 @@ private:
 
     //main game
 
+
+    void initTextureBullet();
     void initTime();
     void initWindow();
     void initLevel();
@@ -73,6 +80,8 @@ public:
     void updateEnemy();
     void updateCollision();
 	void updateGUI();
+	void updateInput();
+    void updateBullet();
 	void update();
     void renderLevel();
     void RenderPlayer();

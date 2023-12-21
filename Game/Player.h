@@ -1,4 +1,5 @@
 #pragma once
+#include<map>
 #include "hitbox.h"
 #include "bullet.h"
 enum PLAYER_ANIMATION_STATES 
@@ -33,12 +34,9 @@ private:
 
 	//shooting
 
+	//bullet
 	sf::Vector2f mousePosWindow;
-	sf::Vector2f playercenter;
-	std::vector<Bullet> bullets;
-	float shootTimer;
-	float shootTimerMax;
-	sf::Vector2f bulletDir;
+	sf::Clock shootTimer;
 
 
 	//physics
@@ -76,7 +74,6 @@ private:
 	void initTexture();
 	void initSprite();
 	void initphysics();
-	void initBullet();
 
 public:
 	Player();
@@ -109,13 +106,11 @@ public:
 
 	void resetAnimationTimer();
 	void move(const float dir_x, const float dir_y);
-	void shoot();
 	void updatePhysics();
 	void updateMovement();
 	void updateHitbox();
 	void updateAnimation();
 	void update();
-	void renderBullets(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);
 
 };
