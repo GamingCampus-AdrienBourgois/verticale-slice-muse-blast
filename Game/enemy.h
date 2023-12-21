@@ -3,17 +3,32 @@
 #include "Bullet.h"
 #include "hitbox.h"
 
+enum ENEMY_ANIMATION_STATES
+{
+    IDLE = 0,
+    MOVING_LEFT = 1,
+    MOVING_RIGHT = 2,
+    GETDAMAGED = 3,
+    DEAD = 4
+};
+
 class Enemy {
 private:
-
-
-
     sf::Sprite sprite;
     sf::Texture texture;
     float speed;
+    sf::Vector2f direction;
     float hp;
     bool hasShield;
     bool isBoss;
+
+    //animation
+    sf::Clock animationtimer;
+    short animationState;
+    sf::IntRect currentFrame;
+    bool animationswitch;
+
+    void initAnimation();
 
     //hitbox
 
@@ -23,20 +38,20 @@ private:
     void initVariables();
 	void initTexture();
     void initSprite();
-    void initHitbox();
 
 
 public:
     // Constructeur
+    Enemy();
     Enemy(float x, float y, bool isBoss = false);
 
     // Destructeur
     ~Enemy();
 
     // Fonctions membres
-    const sf::FloatRect getGlobalBounds() const;
+    const bool& getAnimationSwitch();
+    const sf::FloatRect getbound() const;
     const sf::Vector2f& getPosition() const;
-    const sf::FloatRect getHitbox() const;
     const bool& isBossEnemy() const;
 
     // Fonction pour tirer un projectile
@@ -50,9 +65,9 @@ public:
 
 
     //update
-    void updateHitbox();
     void update();
-    void updateSpecific();
+    void movement();
+	void updateAnimation();
     //render
 
     void render(sf::RenderTarget& target);

@@ -29,7 +29,7 @@ void Game::initGUI()
 void Game::initTextureBullet()
 {
 	this->texture["bullet"] = new sf::Texture();
-	this->texture["bullet"]->loadFromFile("Assets/sprite/bulletsprite.jpg");
+	this->texture["bullet"]->loadFromFile("Assets/sprite/BulletSprite.png");
 }
 
 void Game::initTime()
@@ -51,9 +51,17 @@ void Game::initPlayer()
 {
 	this->player = new Player();
 }
-void Game::initEnemy()
+
+void Game::spawnEnemy()
 {
-	this->enemy = new Enemy(301, 420, false);
+	int numEnemies = 37;
+	int spacing = 250;
+
+	for (int i = 0; i < numEnemies; ++i)
+	{
+		int xPos = i * spacing;
+		this->enemies.push_back(new Enemy(xPos, 300, false));
+	}
 }
 
 
@@ -63,8 +71,8 @@ Game::Game()
 	this->initTime();
 	this->initWindow();
 	this->initLevel();
+	this->spawnEnemy();
 	this->initPlayer();
-	this->initEnemy();
 	this->initGUI();
 }
 
@@ -91,11 +99,6 @@ void Game::updateCamera()
 	this->Maincamera.setCenter((this->player->getPosition().x + 300), 300);
 }
 
-void Game::updateEnemy()
-{
-	this->enemy->update();
-}
-
 void Game::updateCollision()
 {
 	//collision player ground
@@ -107,32 +110,6 @@ void Game::updateCollision()
 			this->level->getHitbox().top - this->player->getHitbox().height
 		);
 		this->player->setJump(1);
-	}
-
-
-	//collision player et enemy
-	if (this->player->getHitbox().intersects(this->enemy->getHitbox()))
-	{
-		if (this->timer.getElapsedTime() >= this->hitdelay)
-		{
-			std::cout << "Player collided with enemy!" << std::endl;
-
-			this->player->loseHp(-10);
-
-			// Reset the hit delay timer
-			this->timer.restart();
-		}
-	}
-
-	////collision bullet and enemy
-
-	for (size_t i = 0; i < this->bullets.size(); i++)
-	{
-		if (this->bullets[i]->getbound().intersects(this->enemy->getHitbox()))
-		{
-			this->bullets.erase(this->bullets.begin() + i);
-			delete enemy;
-		}
 	}
 
 }
@@ -179,11 +156,11 @@ void Game::updateInput()
 			// Create a new bullet with the calculated direction as velocity
 			this->bullets.push_back(new Bullet(
 				this->texture["bullet"],
-				this->player->getPosition().x,
-				this->player->getPosition().y,
+				this->player->getPlayerCenter().x,
+				this->player->getPlayerCenter().y,
 				directionX,
 				directionY,
-				5.f
+				15.f
 			));
 
 			// Restart the shoot timer
@@ -206,6 +183,33 @@ void Game::updateBullet()
 			--counter;
 		}
 		++counter;
+	}
+}
+
+void Game::updateEnemy()
+{
+	unsigned Ecounter = 0;
+	for (auto* enemy : this->enemies)
+	{
+		enemy->update();
+
+		for (unsigned Bcounter = 0; Bcounter < this->bullets.size(); ++Bcounter)
+		{
+			if (enemy->getbound().intersects(this->bullets[Bcounter]->getbound()))
+			{
+				// Collision detected between enemy and bullet
+				delete this->enemies.at(Ecounter);
+				this->enemies.erase(this->enemies.begin() + Ecounter);
+
+				delete this->bullets.at(Bcounter);
+				this->bullets.erase(this->bullets.begin() + Bcounter);
+
+				--Ecounter;
+				--Bcounter;
+				break; // Exit the bullet loop since the bullet has been removed
+			}
+		}
+		++Ecounter;
 	}
 }
 
@@ -260,11 +264,6 @@ void Game::RenderPlayer()
 	this->player->render(this->window);
 }
 
-void Game::RenderEnemy()
-{
-	this->enemy->render(this->window);
-}
-
 
 
 void Game::renderGUI()
@@ -282,7 +281,10 @@ void Game::render()
 	{
 		bullet->render(this->window);
 	}
-	this->RenderEnemy();
+	for (auto* enemy : this->enemies)
+	{
+		enemy->render(this->window);
+	}
 	this->renderGUI();
 	
     this->window.display();

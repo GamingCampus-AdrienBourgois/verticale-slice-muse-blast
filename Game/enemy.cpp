@@ -12,6 +12,12 @@
 
 #include "hitbox.h"
 
+void Enemy::initAnimation()
+{
+
+
+}
+
 // Initialise les variables
 void Enemy::initVariables() 
 {
@@ -22,7 +28,7 @@ void Enemy::initVariables()
 
 void Enemy::initTexture()
 {
-    if (!this->texture.loadFromFile("Assets/test/enemy.png")) { // IMAGE A CHANGER QUAND ON AURA TROUVE
+    if (!this->texture.loadFromFile("Assets/Sprite/Enemyidle.png")) { // IMAGE A CHANGER QUAND ON AURA TROUVE
         std::cerr << "Error::Enemy::initSprite::Texture not loaded" << std::endl;
     }
 }
@@ -31,18 +37,16 @@ void Enemy::initTexture()
 void Enemy::initSprite() 
 {
     this->sprite.setTexture(this->texture);
+    this->currentFrame = sf::IntRect(0, 0, 128, 128);
+    this->sprite.setTextureRect(this->currentFrame);
+    this->sprite.setScale(2.5f, 2.5f);
 }
 
-void Enemy::initHitbox()
+
+Enemy::Enemy()
 {
-   float offset_x = 30.0f;
-    float offset_y = 28.0f;
-    float width = 69.0f;
-    float height = 150.0f;
 
-    this->hitbox = new Hitbox(this->sprite, offset_x, offset_y, width, height);
 }
-
 
 // Constructeur
 Enemy::Enemy(float x, float y, bool isBoss) : isBoss(isBoss) 
@@ -51,7 +55,6 @@ Enemy::Enemy(float x, float y, bool isBoss) : isBoss(isBoss)
     this->initVariables();
     this->initSprite();
     this->sprite.setPosition(x, y);
-    this->initHitbox();
 }
 
 // Destructeur
@@ -59,8 +62,18 @@ Enemy::~Enemy()
 {
 }
 
+const bool& Enemy::getAnimationSwitch()
+{
+    bool anim_switch = this->animationswitch;
+
+    if (this->animationswitch)
+        this->animationswitch = false;
+
+    return anim_switch;
+}
+
 // Renvoie les limites globales du sprite
-const sf::FloatRect Enemy::getGlobalBounds() const 
+const sf::FloatRect Enemy::getbound() const
 {
     return this->sprite.getGlobalBounds();
 }
@@ -71,20 +84,10 @@ const sf::Vector2f& Enemy::getPosition() const
     return this->sprite.getPosition();
 }
 
-const sf::FloatRect Enemy::getHitbox() const
-{
-    return this->hitbox->getGlobalBounds();
-}
-
 // Renvoie si l'ennemi est un boss
 const bool& Enemy::isBossEnemy() const 
 {
     return this->isBoss;
-}
-
-void Enemy::updateHitbox()
-{
-    this->hitbox->update();
 }
 
 // Fonction pour activer le bouclier
@@ -124,28 +127,46 @@ void Enemy::takeDamage(float damage)
     }
 }
 
-void Enemy::updateSpecific() 
+void Enemy::movement() 
 {
-    this->sprite.move(speed * 1.0f, 0); // Multiplicateur de vitesse
-
-    // Inversion de la direction lorsque l'ennemi atteint un bord
-    if (this->sprite.getPosition().x <= 300 || this->sprite.getPosition().x + this->getGlobalBounds().width >= 800) {
-        speed = -speed;
+    this->animationState = IDLE;
+    if (rand() % 100 < 1) // Adjust the percentage as needed
+    {
+        // Generate a random horizontal direction
+        int randomDirection = rand() % 3 - 1; // -1, 0, or 1
+        this->direction.x = static_cast<float>(randomDirection);
     }
 
-    // Si il est a - de 75% hp il va plus vite
-    if (this->hp / 100.0f <= 0.75) {
-        this->speed *= 1.5f; // Increase the speed by 50%
-    }
+    // Move the enemy horizontally
+    this->sprite.move(this->speed * this->direction.x, 0.f);
 
+}
+
+void Enemy::updateAnimation()
+{
+    if (this->animationState == IDLE)
+    {
+        if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
+        {
+            this->currentFrame.top = 0.f;
+            this->currentFrame.left += 48.f;
+            if (this->currentFrame.left >= 288.f)
+                this->currentFrame.left = 0;
+
+
+            this->animationtimer.restart();
+            this->sprite.setTextureRect(this->currentFrame);
+        }
+
+    }
 }
 
 
 void Enemy::update() 
 {
     // Logique commune pour tous les ennemis ici
-    this->updateSpecific();
-    this->updateHitbox();
+    this->updateAnimation();
+    this->movement();
 }
 
 // Rendu de l'ennemi
@@ -153,6 +174,4 @@ void Enemy::render(sf::RenderTarget& target)
 {
     target.draw(this->sprite);
 
-    if (this->hitbox)
-        this->hitbox->render(target);
 }

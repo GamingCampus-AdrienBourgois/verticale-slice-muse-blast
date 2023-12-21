@@ -42,11 +42,12 @@ private:
     sf::Vector2f mousePosWindow;
     sf::Clock shootTimer;
 
+    //enemy
+	std::vector<Enemy*> enemies;
 
     //include
 
     Player* player;
-    Enemy* enemy;
     class Level* level;
 
     //player GUI
@@ -67,7 +68,7 @@ private:
     void initWindow();
     void initLevel();
     void initPlayer();
-    void initEnemy();
+    void spawnEnemy();
     Menu mainMenu;
 
 public:
@@ -77,11 +78,12 @@ public:
 
 	void updatePlayer();
     void updateCamera();
-    void updateEnemy();
+
     void updateCollision();
 	void updateGUI();
 	void updateInput();
     void updateBullet();
+    void updateEnemy();
 	void update();
     void renderLevel();
     void RenderPlayer();

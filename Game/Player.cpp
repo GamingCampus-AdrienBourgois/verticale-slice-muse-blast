@@ -34,7 +34,7 @@ void Player::initVariables()
 
 void Player::initTexture()
 {
-	if (!this->texturesheet.loadFromFile("Assets/sprite/SpriteTestRock.png"))
+	if (!this->texturesheet.loadFromFile("Assets/sprite/SpriterockArme.png"))
 	{
 		std::cout << "Error::player::image not load" << "\n";
 	}
@@ -44,7 +44,7 @@ void Player::initTexture()
 void Player::initSprite()
 {
 	this->sprite.setTexture(this->texturesheet);
-	this->currentFrame = sf::IntRect(0, 0, 44, 68);
+	this->currentFrame = sf::IntRect(0, 0, 48, 72);
 	this->sprite.setTextureRect(this->currentFrame);
 	this->sprite.setScale(2.5f, 2.5f);
 }
@@ -199,8 +199,8 @@ void Player::initHitbox()
 {
 	float offset_x = 30.0f;
 	float offset_y = 0.f;
-	float width = 69.0f;
-	float height = 167.0f;
+	float width = 72.0f;
+	float height = 175.0f;
 
 	this->hitbox = new Hitbox(this->sprite, offset_x, offset_y, width, height);
 }
@@ -313,8 +313,8 @@ void Player::updateAnimation()
 		if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
 		{
 			this->currentFrame.top = 0.f;
-			this->currentFrame.left += 44.f;
-			if (this->currentFrame.left >= 176.f)
+			this->currentFrame.left += 48.f;
+			if (this->currentFrame.left >= 288.f)
 				this->currentFrame.left = 0;
 
 
@@ -327,9 +327,9 @@ void Player::updateAnimation()
 	{
 		if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
 		{
-			this->currentFrame.top = 68.f;
-			this->currentFrame.left += 44.f;
-			if (this->currentFrame.left >= 176.f)
+			this->currentFrame.top = 72.f;
+			this->currentFrame.left += 48.f;
+			if (this->currentFrame.left >= 192.f)
 				this->currentFrame.left = 0;
 
 
@@ -345,9 +345,9 @@ void Player::updateAnimation()
 	{
 		if (this->animationtimer.getElapsedTime().asSeconds() >= 0.15f || this->getAnimationSwitch())
 		{
-			this->currentFrame.top = 68.f;
-			this->currentFrame.left += 44.f;
-			if (this->currentFrame.left >= 176.f)
+			this->currentFrame.top = 72.f;
+			this->currentFrame.left += 48.f;
+			if (this->currentFrame.left >= 192.f)
 				this->currentFrame.left = 0;
 
 
