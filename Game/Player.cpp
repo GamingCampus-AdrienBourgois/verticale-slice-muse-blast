@@ -400,6 +400,6 @@ void Player::render(sf::RenderTarget& target)
 {
 	target.draw(this->sprite);
 
-	if (this->hitbox)
-		this->hitbox->render(target);
+	/*if (this->hitbox)
+		this->hitbox->render(target);*/
 }

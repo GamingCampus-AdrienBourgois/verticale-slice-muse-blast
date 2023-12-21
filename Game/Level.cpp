@@ -117,7 +117,7 @@ void Level::render(sf::RenderTarget& target)
     target.draw(this->hp_sprite);
     target.draw(this->musique_sprite);
     target.draw(this->ground);
-    this->hitbox->render(target);
+    //this->hitbox->render(target);
 
 }
 
