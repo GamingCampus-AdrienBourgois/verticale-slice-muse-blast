@@ -54,7 +54,7 @@ void Game::initPlayer()
 
 void Game::spawnEnemy()
 {
-	int numEnemies = 37;
+	int numEnemies = 150;
 	int spacing = 250;
 	int playerOffset = 400;  // Minimum distance from the player
 
@@ -97,6 +97,18 @@ Game::~Game()
 void Game::updatePlayer()
 {
 	this->player->update();
+
+	// Limit player movement between X0 and X14500
+	if (this->player->getPosition().x < 0.f)
+	{
+		this->player->setPosition(0.f, this->player->getPosition().y);
+		this->player->resetVelocityX();
+	}
+	else if (this->player->getPosition().x > 14500.f)
+	{
+		this->player->setPosition(14500.f, this->player->getPosition().y);
+		this->player->resetVelocityX();
+	}
 }
 
 void Game::updateCamera()
@@ -167,7 +179,7 @@ void Game::updateInput()
 				directionY,
 				15.f
 			));
-
+			this->bullets.back()->setStartPosition(this->player->getPlayerCenter());
 			// Restart the shoot timer
 			shootTimer.restart();
 		}
@@ -177,11 +189,14 @@ void Game::updateInput()
 void Game::updateBullet()
 {
 	unsigned counter = 0;
-	for (auto *bullet : this->bullets)
+	float maxTravelDistance = 500.f;
+
+	for (auto* bullet : this->bullets)
 	{
 		bullet->update();
 
-		if (bullet->getbound().top + bullet->getbound().height < 0.f)
+		// Check if the bullet has traveled the maximum distance
+		if (std::abs(bullet->getPosition().x - bullet->getStartPosition().x) >= maxTravelDistance)
 		{
 			delete this->bullets.at(counter);
 			this->bullets.erase(this->bullets.begin() + counter);
@@ -196,16 +211,15 @@ void Game::updateEnemy()
 	unsigned Ecounter = 0;
 	for (auto* enemy : this->enemies)
 	{
-		enemy->update();
+		sf::Vector2f playerPosition = this->player->getPosition();
+		enemy->update(playerPosition);
 
 		for (unsigned Bcounter = 0; Bcounter < this->bullets.size(); ++Bcounter)
 		{
 			if (enemy->getbound().intersects(this->bullets[Bcounter]->getbound()))
 			{
 				// Collision detected between enemy and bullet
-				delete this->enemies.at(Ecounter);
-				this->enemies.erase(this->enemies.begin() + Ecounter);
-
+					this->enemies.erase(this->enemies.begin() + Ecounter);
 				delete this->bullets.at(Bcounter);
 				this->bullets.erase(this->bullets.begin() + Bcounter);
 

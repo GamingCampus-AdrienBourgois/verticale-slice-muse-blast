@@ -3,6 +3,7 @@
 #include<ctime>
 #include<iostream>
 #include<time.h>
+#include <cmath>
 
 #include<SFML/System.hpp>
 #include<SFML/Graphics.hpp>
@@ -24,6 +25,7 @@ void Enemy::initVariables()
     this->speed = 2.f;
     this->hp = 100.f;
     this->hasShield = false;
+    this->followDistance = 500.f;
 }
 
 void Enemy::initTexture()
@@ -84,6 +86,18 @@ const sf::Vector2f& Enemy::getPosition() const
     return this->sprite.getPosition();
 }
 
+const bool& Enemy::dead()
+{
+    if (this->isdead == true)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 // Renvoie si l'ennemi est un boss
 const bool& Enemy::isBossEnemy() const 
 {
@@ -122,12 +136,12 @@ void Enemy::takeDamage(float damage)
         }
 
         if (this->hp <= 0) {
-            // logique de la mort de l'ennemi
+            this->isdead = true;
         }
     }
 }
 
-void Enemy::movement() 
+void Enemy::movement(const sf::Vector2f& playerPosition)
 {
     this->animationState = ENEMY_IDLE;
     if (rand() % 100 < 1) // Adjust the percentage as needed
@@ -136,6 +150,8 @@ void Enemy::movement()
         int randomDirection = rand() % 3 - 1; // -1, 0, or 1
         this->direction.x = static_cast<float>(randomDirection);
     }
+
+    followplayer(playerPosition);
 
     // Move the enemy horizontally
     float horizontalMovement = this->speed * this->direction.x;
@@ -205,16 +221,36 @@ void Enemy::updateAnimation()
 
         }
         this->sprite.setScale(-2.5f, 2.5f);
-        this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0.f);
+        this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 4.f, 0.f);
     }
 }
 
 
-void Enemy::update() 
+void Enemy::followplayer(const sf::Vector2f& playerPosition)
+{
+    // Calculate the distance between the enemy and the player
+    float distanceToPlayer = std::abs(playerPosition.x - this->sprite.getPosition().x);
+
+    // If the player is too close, follow the player
+    if (distanceToPlayer < followDistance)
+    {
+        // Determine the direction to move towards the player
+        if (playerPosition.x > this->sprite.getPosition().x)
+        {
+            this->direction.x = 1.f; // Move towards the player on the right
+        }
+        else if (playerPosition.x < this->sprite.getPosition().x)
+        {
+            this->direction.x = -1.f; // Move towards the player on the left
+        }
+    }
+}
+
+void Enemy::update(const sf::Vector2f& playerPosition)
 {
     // Logique commune pour tous les ennemis ici
     this->updateAnimation();
-    this->movement();
+    this->movement(playerPosition);
 }
 
 // Rendu de l'ennemi

@@ -58,11 +58,11 @@ void Level::initSprite()
 {
     this->background_sprite.setTexture(this->background_texture);
     this->background_sprite.setScale(2.5f, 2.5f);
-    this->background_sprite.setPosition(-1500.f, -100.f);
+    this->background_sprite.setPosition(-700.f, -100.f);
 
     this->ground.setTexture(this->groundtexture);
     this->ground.setScale(2.5f, 2.5f);
-    this->ground.setPosition(-500.f, 550.f);
+    this->ground.setPosition(-700.f, 550.f);
 
     this->hp_sprite.setTexture(this->hp_texture);
     this->musique_sprite.setTexture(this->musique_texture);

@@ -21,6 +21,9 @@ private:
     float hp;
     bool hasShield;
     bool isBoss;
+    unsigned hitsReceived;
+    bool isdead;
+    float followDistance;
 
     //animation
     sf::Clock animationtimer;
@@ -52,6 +55,7 @@ public:
     const bool& getAnimationSwitch();
     const sf::FloatRect getbound() const;
     const sf::Vector2f& getPosition() const;
+    const bool& dead();
     const bool& isBossEnemy() const;
 
     // Fonction pour tirer un projectile
@@ -65,8 +69,9 @@ public:
 
 
     //update
-    void update();
-    void movement();
+    void followplayer(const sf::Vector2f& playerPosition);
+    void update(const sf::Vector2f& playerPosition);
+    void movement(const sf::Vector2f& playerPosition);
 	void updateAnimation();
     //render
 
