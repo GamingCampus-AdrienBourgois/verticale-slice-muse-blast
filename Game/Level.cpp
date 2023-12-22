@@ -15,19 +15,23 @@
 #include "Level.h"
 #include "Player.h"
 
+bool YourClass::initialized = false;
+int YourClass::randomnumber = 0;
+
+YourClass instance1;
+YourClass instance2;
+
+int randomNumber1 = instance1.getRandomNumber();
+int randomNumber2 = instance2.getRandomNumber();
 
 // Initialisation de toutes les textures et icones
 void Level::initTexture()
 {
-    std::random_device rd;
+   
+    std::cout << "Random Number from instance1: " << randomNumber1 << std::endl;
+    std::cout << "Random Number from instance2: " << randomNumber2 << std::endl;
 
-    std::mt19937 gen(rd());
-
-    std::uniform_int_distribution<> dis(1, 4);
-
-    this->randomnumber = dis(gen);
-
-    if (!this->background_texture.loadFromFile("Assets/sprite/stage" + std::to_string(this->randomnumber) + ".png"))
+    if (!this->background_texture.loadFromFile("Assets/sprite/stage" + std::to_string(randomNumber1) + ".png"))
     {
         std::cout << "Loading Backgroung" << "\n";
     }
@@ -37,13 +41,9 @@ void Level::initTexture()
         std::cout << "Loading ground" << "\n";
     }
 
-    if (!this->musique_texture.loadFromFile("Assets/sprite/musique" + std::to_string(this->randomnumber) + ".png")) 
+    if (!this->musique_texture.loadFromFile("Assets/sprite/musique" + std::to_string(randomNumber1) + ".png")) 
     {
         std::cout << "Loading Icone" << "\n";
-    }
-    if (!this->Playersprite.loadFromFile("Assets/sprite/SpritePlayer"+ std::to_string(this->randomnumber) + ".png"))
-    {
-        std::cout << "Error::player::image not load" << "\n";
     }
 
     //Icones
@@ -71,13 +71,30 @@ void Level::initSprite()
 
 void Level::initMusic()
 {
-    if (!this->music.openFromFile("Assets/music/music" + std::to_string(this->randomnumber) + ".ogg")) {
+    if (!this->music.openFromFile("Assets/music/music" + std::to_string(randomNumber1) + ".ogg")) {
         std::cout << "Loading Music" << "\n";
     }
 
     music.setLoop(true);
-    music.setVolume(1.0f);
-    /* music.play(); */
+    music.setVolume(20.0f);
+    music.play(); 
+
+    if (randomNumber1 == 2)
+    {
+        music.setVolume(150.0f);
+    }
+
+    if (randomNumber1 == 1)
+    {
+        music.setVolume(100.0f);
+    }
+
+    if (randomNumber1 == 4)
+    {
+        music.setVolume(10.0f);
+    }
+
+    
 }
 
 
@@ -124,25 +141,7 @@ void Level::render(sf::RenderTarget& target)
 //Modificqtion du au level
 void Level::level_effect()
 {
-    if (this->randomnumber == 1)
-    {
-        this->level_player_speed = 4;
-    }
-
-    if (this->randomnumber == 1)
-    {
-        this->level_player_speed = 4;
-    }
-
-    if (this->randomnumber == 1)
-    {
-        this->level_player_speed = 4;
-    }
-
-    if (this->randomnumber == 1)
-    {
-        this->level_player_speed = 4;
-    }
+    
 }
 
 const sf::FloatRect Level::getHitbox() const

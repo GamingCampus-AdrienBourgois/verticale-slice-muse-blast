@@ -12,6 +12,8 @@
 #include "Game.h"
 #include"bullet.h"
 
+
+
 void Game::initGUI()
 {
 	//initplayerGUI
@@ -28,8 +30,14 @@ void Game::initGUI()
 
 void Game::initTextureBullet()
 {
+
+	YourClass nombre;
+	int randomNumber = nombre.getRandomNumber();
 	this->texture["bullet"] = new sf::Texture();
-	this->texture["bullet"]->loadFromFile("Assets/sprite/BulletSprite.png");
+	if (this->texture["bullet"]->loadFromFile("Assets/sprite/bullet" + std::to_string(randomNumber) + ".png"))
+	{
+		std::cout << "Loading Backgroung" << "\n";
+	}
 }
 
 void Game::initTime()
@@ -69,6 +77,7 @@ void Game::spawnEnemy()
 }
 
 
+
 Game::Game()
 {
 	this->killCount = 0;
@@ -104,9 +113,9 @@ void Game::updatePlayer()
 		this->player->setPosition(0.f, this->player->getPosition().y);
 		this->player->resetVelocityX();
 	}
-	else if (this->player->getPosition().x > 14500.f)
+	else if (this->player->getPosition().x > 22970.f)
 	{
-		this->player->setPosition(14500.f, this->player->getPosition().y);
+		this->player->setPosition(22970.f, this->player->getPosition().y);
 		this->player->resetVelocityX();
 	}
 }
@@ -132,6 +141,7 @@ void Game::updateCollision()
 }
 
 
+
 void Game::updateGUI()
 {
 	//update player GUI POSITION
@@ -155,6 +165,9 @@ void Game::updateGUI()
 
 void Game::updateInput()
 {
+	YourClass nombre;
+	int randomNumber = nombre.getRandomNumber();
+
 	if (shootTimer.getElapsedTime().asSeconds() >= cooldown) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 			// Get the mouse position in window coordinates
@@ -175,7 +188,21 @@ void Game::updateInput()
 			}
 
 			// Create a new bullet with the calculated direction as velocity
-			this->bullets.push_back(new Bullet(
+			
+			if (randomNumber == 2)
+			{
+				this->bullets.push_back(new Bullet(
+					this->texture["bullet"],
+					this->player->getPlayerCenter().x,
+					this->player->getPlayerCenter().y,
+					directionX,
+					directionY,
+					25.f
+				));
+			}
+
+			else
+				this->bullets.push_back(new Bullet(
 				this->texture["bullet"],
 				this->player->getPlayerCenter().x,
 				this->player->getPlayerCenter().y,
@@ -183,6 +210,7 @@ void Game::updateInput()
 				directionY,
 				15.f
 			));
+
 			this->bullets.back()->setStartPosition(this->player->getPlayerCenter());
 			// Restart the shoot timer
 			shootTimer.restart();
@@ -192,8 +220,15 @@ void Game::updateInput()
 
 void Game::updateBullet()
 {
+	YourClass nombre;
+	int randomNumber = nombre.getRandomNumber();
 	unsigned counter = 0;
-	float maxTravelDistance = 500.f;
+	float maxTravelDistance = 500.0f;
+
+	if (randomNumber == 4)
+	{
+		maxTravelDistance = 1000.f;
+	}
 
 	for (auto* bullet : this->bullets)
 	{

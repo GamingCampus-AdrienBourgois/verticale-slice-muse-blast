@@ -1,12 +1,13 @@
 #pragma once
 #include "hitbox.h"
 #include "game.h"
+#include <random>
 class Level
 {
 private:
 
     Hitbox* hitbox;
-    int randomnumber;
+ 
 
     // Modification du a l'environnement
 
@@ -57,4 +58,31 @@ public:
     void initmodificationlevel();
     void level_effect();
     void render(sf::RenderTarget& target);
+};
+
+
+class YourClass {
+public:
+    YourClass() {
+        // Utilisation d'une variable statique pour garantir la même valeur pour toutes les instances
+        if (!initialized) {
+            generateRandomNumber();
+            initialized = true;
+        }
+    }
+
+    int getRandomNumber() const {
+        return randomnumber;
+    }
+
+private:
+    static bool initialized;  // Variable statique pour vérifier si la valeur a été initialisée
+    static int randomnumber;  // Variable statique pour stocker la valeur aléatoire
+
+    void generateRandomNumber() {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(1, 4);
+        randomnumber = dis(gen);
+    }
 };

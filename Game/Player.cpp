@@ -17,6 +17,9 @@
 #include"bullet.h"
 #include "game.h"
 
+YourClass nombre;
+
+int randomNumber = nombre.getRandomNumber();
 
 void Player::initAnimation()
 {
@@ -37,18 +40,13 @@ void Player::initVariables()
 
 void Player::initTexture()
 {
-	std::random_device rd;
-
-	std::mt19937 gen(rd());
-
-	std::uniform_int_distribution<> dis(1, 4);
-
-	this->randomnumber = dis(gen);
-
-	if (!this->texturesheet.loadFromFile("Assets/sprite/SpritePlayer" + std::to_string(this->randomnumber) + ".png"))
+	
+	if (!this->texturesheet.loadFromFile("Assets/sprite/SpritePlayer" + std::to_string(randomNumber) + ".png"))
 	{
 		std::cout << "Error::player::image not load" << "\n";
 	}
+
+	std::cout << randomNumber << "\n";
 
 }
 
@@ -74,6 +72,23 @@ void Player::initphysics()
 
 }
 
+void Player::initphysicsModified()
+{
+	if (randomNumber == 1)
+	{
+		this->velocityMax = 20.0f;
+		this->velocityMin = 1.f;
+		this->acceleration = 20.0f;
+	}
+
+	if (randomNumber == 3)
+	{
+		this->jumpHeight = 20.f;
+	}
+	
+
+}
+
 Player::Player()
 {
 	
@@ -82,6 +97,7 @@ Player::Player()
 	this->initTexture();
 	this->initSprite();
 	this->initphysics();
+	this->initphysicsModified();
 	this->initHitbox();
 
 }

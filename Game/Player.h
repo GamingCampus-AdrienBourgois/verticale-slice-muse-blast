@@ -25,14 +25,13 @@ private:
 	sf::Sprite healthbar;
 	sf::Texture health;
 
-	//animation
-	int randomnumber;
+	
 
 	class Level* level;
 	short animationState;
 	sf::IntRect currentFrame;
 	bool animationswitch;
-
+	class YourClass* obj;
 	void initAnimation();
 
 	//shooting
@@ -77,6 +76,7 @@ private:
 	void initTexture();
 	void initSprite();
 	void initphysics();
+	void initphysicsModified();
 
 public:
 	Player();

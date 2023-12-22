@@ -54,6 +54,7 @@ private:
 
     class Player* player;
     class Level* level;
+    class YourClass* obj;
 
     //player GUI
 
